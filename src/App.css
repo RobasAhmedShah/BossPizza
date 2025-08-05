@@ -1,0 +1,1271 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+* {
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* Base responsive styles */
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Touch-friendly tap targets */
+button, a, input, select, textarea {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* Improved touch interactions */
+button, a {
+  -webkit-tap-highlight-color: rgba(220, 38, 38, 0.1);
+  touch-action: manipulation;
+}
+
+/* Video optimizations */
+.hero-video {
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+/* Mobile-optimized carousel */
+.carousel-item {
+  transition: transform 0.3s ease-in-out;
+}
+
+.carousel-item:hover {
+  transform: scale(1.02);
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .carousel-item:hover {
+    transform: none;
+  }
+  .carousel-item:active {
+    transform: scale(0.98);
+  }
+}
+
+/* Enhanced pizza cards for mobile */
+.pizza-card {
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.pizza-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px -5px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.1);
+  border-color: #dc2626;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .pizza-card:hover {
+    transform: none;
+  }
+  .pizza-card:active {
+    transform: scale(0.98);
+  }
+}
+
+/* Mobile-optimized buttons */
+.add-to-cart-btn {
+  transition: all 0.2s ease;
+  min-height: 44px;
+  min-width: 44px;
+}
+
+.add-to-cart-btn:hover {
+  transform: scale(1.05);
+  background-color: #b91c1c;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .add-to-cart-btn:hover {
+    transform: none;
+  }
+  .add-to-cart-btn:active {
+    transform: scale(0.95);
+  }
+}
+
+/* Enhanced category tabs for mobile */
+.category-tab {
+  transition: all 0.3s ease;
+  position: relative;
+  min-height: 48px;
+  padding: 12px 16px;
+}
+
+.category-tab::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: -2px;
+  left: 50%;
+  background-color: #dc2626;
+  transition: all 0.3s ease;
+  transform: translateX(-50%);
+}
+
+.category-tab.active::after,
+.category-tab:hover::after {
+  width: 100%;
+}
+
+/* Mobile-optimized order tracking */
+.order-tracking-step {
+  position: relative;
+}
+
+.order-tracking-step::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 100%;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(to right, #dc2626, #fca5a5);
+  transform: translateY(-50%);
+}
+
+.order-tracking-step:last-child::after {
+  display: none;
+}
+
+/* Animations */
+.pulse-animation {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: .8;
+    transform: scale(1.02);
+  }
+}
+
+.loading-spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.slide-in {
+  animation: slideIn 0.5s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Fade in animation for scroll to top button */
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Enhanced button styles */
+.btn-primary {
+  background: linear-gradient(135deg, #dc2626, #b91c1c);
+  transition: all 0.3s ease;
+  min-height: 44px;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #b91c1c, #991b1b);
+  transform: translateY(-1px);
+  box-shadow: 0 10px 20px rgba(220, 38, 38, 0.3);
+}
+
+.btn-secondary {
+  background: linear-gradient(135deg, #ea580c, #c2410c);
+  transition: all 0.3s ease;
+  min-height: 44px;
+}
+
+.btn-secondary:hover {
+  background: linear-gradient(135deg, #c2410c, #9a3412);
+  transform: translateY(-1px);
+  box-shadow: 0 10px 20px rgba(234, 88, 12, 0.3);
+}
+
+/* Glass effects */
+.glass-effect {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, #dc2626, #ea580c);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Scrollbar styles */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Cart animations */
+.floating-cart-item {
+  animation: floatToCart 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.floating-cart-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+@keyframes floatToCart {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--target-x, 0), var(--target-y, 0)) scale(0.3);
+    opacity: 0;
+  }
+}
+
+/* Menu item hover effects */
+.menu-item-card {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.menu-item-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+}
+
+.menu-item-image {
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.menu-item-card:hover .menu-item-image {
+  transform: scale(1.05);
+}
+
+/* Mobile touch optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .menu-item-card:hover {
+    transform: none;
+  }
+  
+  .menu-item-card:active {
+    transform: scale(0.98);
+  }
+  
+  .btn-primary:hover,
+  .btn-secondary:hover {
+    transform: none;
+  }
+  
+  .btn-primary:active,
+  .btn-secondary:active {
+    transform: scale(0.95);
+  }
+}
+
+/* Category navigation */
+.category-nav {
+  scroll-behavior: smooth;
+}
+
+.category-nav::-webkit-scrollbar {
+  display: none;
+}
+
+/* Cart panel animations */
+.cart-panel-enter {
+  transform: translateX(100%);
+}
+
+.cart-panel-enter-active {
+  transform: translateX(0);
+  transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.cart-panel-exit {
+  transform: translateX(0);
+}
+
+.cart-panel-exit-active {
+  transform: translateX(100%);
+  transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Add to cart success animation */
+.add-to-cart-success {
+  background: linear-gradient(135deg, #10b981, #059669) !important;
+  animation: successPulse 0.6s ease-out;
+}
+
+@keyframes successPulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Category active state */
+.category-active {
+  background: linear-gradient(135deg, #dc2626, #b91c1c);
+  color: white;
+  box-shadow: 0 4px 14px 0 rgba(220, 38, 38, 0.39);
+  transform: scale(1.02);
+}
+
+/* Cart badge animation */
+.cart-badge {
+  animation: cartBadgeBounce 0.5s ease-out;
+}
+
+@keyframes cartBadgeBounce {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1.3);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Fixed cart panel styles */
+.fixed-cart-panel {
+  background: linear-gradient(to bottom, #ffffff, #f9fafb);
+}
+
+.fixed-cart-panel .cart-item {
+  transition: all 0.2s ease;
+}
+
+.fixed-cart-panel .cart-item:hover {
+  transform: translateX(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Cart Panel Slide In Animation */
+.animate-slide-in {
+  animation: slideInFromRight 0.3s ease-out;
+}
+
+@keyframes slideInFromRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* NEW MICRO-INTERACTIONS */
+
+/* Shake Animation for Errors */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-4px); }
+  20%, 40%, 60%, 80% { transform: translateX(4px); }
+}
+
+.animate-shake {
+  animation: shake 0.5s ease-in-out;
+}
+
+/* Slide Down Animation for Dropdowns */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-down {
+  animation: slideDown 0.2s ease-out;
+}
+
+/* Modal Enter Animation */
+@keyframes modalEnter {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.animate-modal-enter {
+  animation: modalEnter 0.2s ease-out;
+}
+
+/* Progress Bar Animation */
+@keyframes progress {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.animate-progress {
+  animation: progress linear forwards;
+}
+
+/* Micro Bounce for Quantity Selectors */
+@keyframes microBounce {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+.animate-micro-bounce {
+  animation: microBounce 0.2s ease-out;
+}
+
+/* Number Change Animation */
+@keyframes numberChange {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+.animate-number-change {
+  animation: numberChange 0.2s ease-out;
+}
+
+/* Success Bounce */
+@keyframes successBounce {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.animate-success-bounce {
+  animation: successBounce 0.3s ease-out;
+}
+
+/* Spin Dash for Loading */
+@keyframes spinDash {
+  0% {
+    stroke-dasharray: 1, 200;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dasharray: 90, 200;
+    stroke-dashoffset: -35px;
+  }
+  100% {
+    stroke-dasharray: 90, 200;
+    stroke-dashoffset: -124px;
+  }
+}
+
+.animate-spin-dash {
+  animation: spinDash 1.5s ease-in-out infinite;
+}
+
+/* Parallax Effect */
+.parallax-bg {
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+/* Section Reveal */
+@keyframes sectionReveal {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-section-reveal {
+  animation: sectionReveal 0.6s ease-out;
+}
+
+/* Confetti Animation */
+@keyframes confetti {
+  0% {
+    transform: translateY(0) rotateZ(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-100vh) rotateZ(720deg);
+    opacity: 0;
+  }
+}
+
+.animate-confetti {
+  animation: confetti 3s ease-out forwards;
+}
+
+/* Hover Glow Effect */
+.hover-glow {
+  transition: all 0.3s ease;
+}
+
+.hover-glow:hover {
+  box-shadow: 0 0 20px rgba(220, 38, 38, 0.3);
+}
+
+/* Tab Slide Transition */
+.tab-content-enter {
+  opacity: 0;
+  transform: translateX(20px);
+}
+
+.tab-content-enter-active {
+  opacity: 1;
+  transform: translateX(0);
+  transition: all 0.3s ease-out;
+}
+
+.tab-content-exit {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.tab-content-exit-active {
+  opacity: 0;
+  transform: translateX(-20px);
+  transition: all 0.3s ease-out;
+}
+
+/* Accordion Smooth Height */
+.accordion-content {
+  transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+  overflow: hidden;
+}
+
+.accordion-content.collapsed {
+  max-height: 0;
+  opacity: 0;
+}
+
+.accordion-content.expanded {
+  max-height: 1000px;
+  opacity: 1;
+}
+
+/* Button Press Effect */
+.btn-press {
+  transition: all 0.1s ease;
+}
+
+.btn-press:active {
+  transform: scale(0.98);
+}
+
+/* Intersection Observer Animations */
+.fade-in-on-scroll {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.6s ease-out;
+}
+
+.fade-in-on-scroll.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Enhanced Button States */
+.btn-enhanced {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.btn-enhanced::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.btn-enhanced:hover::before {
+  left: 100%;
+}
+
+/* Ripple Effect */
+.ripple {
+  position: relative;
+  overflow: hidden;
+}
+
+.ripple::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.ripple:active::after {
+  width: 300px;
+  height: 300px;
+}
+
+/* Smart Scroll Enhancements */
+.scroll-mt-48 {
+  scroll-margin-top: 12rem;
+}
+
+/* Category Navigation Enhancements */
+.category-nav-enhanced {
+  position: relative;
+}
+
+.category-nav-enhanced::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(220, 38, 38, 0.3), transparent);
+}
+
+/* Active Section Indicator */
+.section-indicator {
+  position: relative;
+}
+
+.section-indicator::before {
+  content: '';
+  position: absolute;
+  left: -2rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 2rem;
+  background: linear-gradient(to bottom, #dc2626, #ea580c);
+  border-radius: 2px;
+  animation: pulse 2s infinite;
+}
+
+/* Scroll Direction Indicators */
+.scroll-up-indicator {
+  animation: scrollUpPulse 1s ease-in-out infinite;
+}
+
+.scroll-down-indicator {
+  animation: scrollDownPulse 1s ease-in-out infinite;
+}
+
+@keyframes scrollUpPulse {
+  0%, 100% { transform: translateY(0); opacity: 0.7; }
+  50% { transform: translateY(-4px); opacity: 1; }
+}
+
+@keyframes scrollDownPulse {
+  0%, 100% { transform: translateY(0); opacity: 0.7; }
+  50% { transform: translateY(4px); opacity: 1; }
+}
+
+/* Enhanced Focus States for Accessibility */
+.focus-ring {
+  transition: all 0.2s ease;
+}
+
+.focus-ring:focus-visible {
+  outline: 2px solid #dc2626;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.1);
+}
+
+/* Smooth Category Transitions */
+.category-transition {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.category-transition.entering {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.category-transition.entered {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Stagger Animation for Menu Items */
+.menu-item-stagger {
+  animation: fadeInUp 0.6s ease-out;
+  animation-fill-mode: both;
+}
+
+.menu-item-stagger:nth-child(1) { animation-delay: 0.1s; }
+.menu-item-stagger:nth-child(2) { animation-delay: 0.2s; }
+.menu-item-stagger:nth-child(3) { animation-delay: 0.3s; }
+.menu-item-stagger:nth-child(4) { animation-delay: 0.4s; }
+.menu-item-stagger:nth-child(5) { animation-delay: 0.5s; }
+.menu-item-stagger:nth-child(6) { animation-delay: 0.6s; }
+
+/* Line Clamp Utility */
+.line-clamp-1 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+}
+
+.line-clamp-2 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.line-clamp-3 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+/* HEADER SPECIFIC STYLES */
+
+/* Header backdrop blur effect */
+.header-backdrop {
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+/* Header transition effects */
+.header-transition {
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Header glass morphism */
+.header-glass {
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Header logo glow effect */
+.header-logo-glow {
+  filter: drop-shadow(0 0 10px rgba(220, 38, 38, 0.3));
+}
+
+/* Header navigation hover effects */
+.header-nav-item {
+  position: relative;
+  overflow: hidden;
+}
+
+.header-nav-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: left 0.5s ease;
+}
+
+.header-nav-item:hover::before {
+  left: 100%;
+}
+
+/* Header mobile menu animations */
+.mobile-menu-enter {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
+.mobile-menu-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: all 0.3s ease-out;
+}
+
+.mobile-menu-exit {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.mobile-menu-exit-active {
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: all 0.3s ease-out;
+}
+
+/* Header cart badge pulse */
+.header-cart-badge {
+  animation: headerCartPulse 2s infinite;
+}
+
+@keyframes headerCartPulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.7);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 10px rgba(220, 38, 38, 0);
+  }
+}
+
+/* Header scroll indicator */
+.header-scroll-indicator {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #dc2626, #ea580c, #f59e0b);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+
+/* RESPONSIVE DESIGN BREAKPOINTS */
+
+/* Mobile First - Base styles above are mobile-optimized */
+
+/* Small Mobile (320px+) */
+@media (min-width: 320px) {
+  .container-mobile {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+  
+  /* Ensure minimum touch targets */
+  button, a, input, select {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Optimize text sizes for small screens */
+  .text-mobile-xs { font-size: 0.75rem; line-height: 1rem; }
+  .text-mobile-sm { font-size: 0.875rem; line-height: 1.25rem; }
+  .text-mobile-base { font-size: 1rem; line-height: 1.5rem; }
+  .text-mobile-lg { font-size: 1.125rem; line-height: 1.75rem; }
+  .text-mobile-xl { font-size: 1.25rem; line-height: 1.75rem; }
+}
+
+/* Large Mobile (480px+) */
+@media (min-width: 480px) {
+  .hero-video {
+    height: 200px;
+  }
+  
+  .menu-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  /* Better spacing on larger mobile screens */
+  .container-mobile {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+/* Tablet Portrait (768px+) */
+@media (min-width: 768px) {
+  .hero-video {
+    height: 240px;
+  }
+  
+  .menu-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+  
+  .category-nav {
+    padding: 0 2rem;
+  }
+  
+  /* Show cart panel on tablet+ */
+  .fixed-cart-panel {
+    display: block;
+  }
+  
+  /* Restore hover effects on non-touch devices */
+  .menu-item-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  }
+}
+
+/* Tablet Landscape (1024px+) */
+@media (min-width: 1024px) {
+  .hero-video {
+    height: 280px;
+  }
+  
+  .menu-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+  
+  /* Restore cart panel padding */
+  .menu-content-with-cart {
+    padding-right: 24rem;
+  }
+}
+
+/* Desktop (1280px+) */
+@media (min-width: 1280px) {
+  .fixed-cart-panel {
+    width: 384px;
+  }
+  
+  .menu-content-with-cart {
+    padding-right: 384px;
+  }
+  
+  .menu-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+}
+
+/* Large Desktop (1536px+) */
+@media (min-width: 1536px) {
+  .menu-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Mobile-specific optimizations */
+@media (max-width: 767px) {
+  /* Hide cart panel on mobile */
+  .fixed-cart-panel {
+    display: none !important;
+  }
+  
+  /* Remove cart padding on mobile */
+  .menu-content-with-cart {
+    padding-right: 0 !important;
+  }
+  
+  /* Mobile menu optimizations */
+  .menu-grid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+  
+  /* Mobile category navigation */
+  .category-nav {
+    padding: 0 0.75rem;
+  }
+  
+  /* Mobile hero adjustments */
+  .hero-section {
+    padding: 1.5rem 0;
+  }
+  
+  .hero-video {
+    height: 160px;
+  }
+  
+  /* Mobile form optimizations */
+  .form-grid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+  
+  /* Mobile button sizing */
+  .btn-mobile {
+    padding: 0.75rem 1.25rem;
+    font-size: 0.875rem;
+    min-height: 44px;
+  }
+  
+  /* Mobile text sizing */
+  .text-mobile-lg {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+  }
+  
+  .text-mobile-xl {
+    font-size: 1.5rem;
+    line-height: 2rem;
+  }
+  
+  /* Mobile spacing */
+  .space-mobile {
+    margin-bottom: 1rem;
+  }
+  
+  /* Mobile card adjustments */
+  .card-mobile {
+    padding: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  /* Mobile navigation */
+  .nav-mobile {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: white;
+    border-top: 1px solid #e5e7eb;
+    padding: 0.75rem;
+    z-index: 50;
+  }
+  
+  /* Mobile menu item cards */
+  .menu-item-card {
+    border-radius: 0.75rem;
+  }
+  
+  /* Mobile search and filter adjustments */
+  .mobile-search {
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+  
+  /* Mobile category buttons */
+  .category-nav button {
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+    white-space: nowrap;
+  }
+}
+
+/* High DPI displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .hero-video,
+  .menu-item-image {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+  }
+}
+
+/* Landscape orientation on mobile */
+@media (max-width: 767px) and (orientation: landscape) {
+  .hero-section {
+    padding: 1rem 0;
+  }
+  
+  .hero-video {
+    height: 140px;
+  }
+  
+  /* Adjust mobile cart for landscape */
+  .nav-mobile {
+    padding: 0.5rem 0.75rem;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .glass-effect {
+    background: rgba(0, 0, 0, 0.8);
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .menu-item-card:hover {
+    transform: none;
+  }
+  
+  .floating-cart-item {
+    animation: none;
+  }
+}
+
+/* Print styles */
+@media print {
+  .fixed-cart-panel,
+  .category-nav,
+  .floating-cart-item,
+  .nav-mobile {
+    display: none !important;
+  }
+  
+  .menu-content-with-cart {
+    padding-right: 0 !important;
+  }
+  
+  .menu-item-card {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+}
+
+/* iOS Safari specific fixes */
+@supports (-webkit-touch-callout: none) {
+  /* Fix for iOS Safari viewport height issues */
+  .min-h-screen {
+    min-height: -webkit-fill-available;
+  }
+  
+  /* Fix for iOS Safari input zoom */
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="search"],
+  textarea,
+  select {
+    font-size: 16px !important;
+  }
+}
+
+/* Android Chrome specific fixes */
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  /* Fix for Android Chrome input styling */
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="search"] {
+    -webkit-appearance: none;
+    appearance: none;
+  }
+}
+
+/* Performance optimizations for mobile */
+@media (max-width: 767px) {
+  /* Reduce animation complexity on mobile */
+  .menu-item-card {
+    will-change: auto;
+  }
+  
+  .floating-cart-item {
+    will-change: transform, opacity;
+  }
+  
+  /* Optimize images for mobile */
+  img {
+    image-rendering: optimizeQuality;
+  }
+}
+
+/* Accessibility improvements */
+@media (prefers-contrast: high) {
+  .btn-primary {
+    background: #000;
+    border: 2px solid #fff;
+  }
+  
+  .text-gray-600 {
+    color: #000;
+  }
+}
+
+/* Focus improvements for keyboard navigation */
+.focus-visible:focus {
+  outline: 2px solid #dc2626;
+  outline-offset: 2px;
+}
+
+/* Better touch targets for mobile */
+@media (max-width: 767px) {
+  .touch-target {
+    min-height: 48px;
+    min-width: 48px;
+    padding: 12px;
+  }
+}
+
+/* Scroll restoration specific styles */
+.scroll-restoration-active {
+  scroll-behavior: smooth;
+}
+
+/* Smooth scroll for anchor links */
+html.smooth-scroll {
+  scroll-behavior: smooth;
+}
+
+/* Disable smooth scroll during page transitions */
+html.page-transition {
+  scroll-behavior: auto;
+}
