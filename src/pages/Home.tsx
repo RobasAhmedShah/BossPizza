@@ -165,9 +165,9 @@ const Home: React.FC = () => {
     : '0.0';
 
   return (
-    <div className="min-h-screen overflow-hidden">
+    <div className="overflow-hidden">
       {/* Floating Elements */}
-      <div className="fixed inset-0 pointer-events-none z-10">
+      <div className="absolute inset-0 pointer-events-none z-10">
         {/* Floating Pepperoni */}
         <div 
           className="absolute w-8 h-8 bg-red-600 rounded-full opacity-20 animate-bounce"
@@ -221,7 +221,7 @@ const Home: React.FC = () => {
           <div className="absolute bottom-40 right-32 w-40 h-40 bg-gradient-to-r from-yellow-400 to-red-500 rounded-full blur-3xl opacity-15" />
         </div>
 
-        <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-screen flex items-center">
+        <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-h-screen flex items-center pt-20 pb-8 md:pt-24 md:pb-12">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 w-full items-center">
             
             {/* Left Content - Asymmetrical Layout */}
@@ -290,8 +290,8 @@ const Home: React.FC = () => {
               <div className={`transition-all duration-1000 delay-600 ${isLoaded ? 'opacity-100 translate-x-0 rotate-0' : 'opacity-0 translate-x-20 rotate-12'}`}>
                 <div className="relative">
                   {/* Main Pizza Image */}
-                  <div className="relative w-full max-w-lg mx-auto">
-                    <div className="aspect-square rounded-full overflow-hidden shadow-2xl border-8 border-white/20 backdrop-blur-sm">
+                  <div className="relative w-full max-w-xs sm:max-w-sm md:max-w-md mx-auto">
+                    <div className="aspect-square rounded-full overflow-hidden shadow-2xl border-4 border-white/20 backdrop-blur-sm">
                       {!isVideoPlaying ? (
                         <div className="relative h-full">
                           {banners.map((banner, index) => (
@@ -315,8 +315,8 @@ const Home: React.FC = () => {
                             onClick={() => setIsVideoPlaying(true)}
                             className="absolute inset-0 flex items-center justify-center bg-black/20 hover:bg-black/30 transition-colors group"
                           >
-                            <div className="w-20 h-20 bg-white/90 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform shadow-2xl">
-                              <Play className="h-10 w-10 text-red-600 ml-1" />
+                            <div className="w-12 h-12 bg-white/90 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform shadow-2xl">
+                              <Play className="h-7 w-7 text-red-600 ml-1" />
                             </div>
                           </button>
                         </div>
@@ -333,16 +333,13 @@ const Home: React.FC = () => {
                       )}
                     </div>
 
-                   
-                  
-
                     {/* Steam Effect */}
-                    <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-4">
-                      <div className="flex space-x-1">
+                    <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-2">
+                      <div className="flex space-x-0.5">
                         {[...Array(3)].map((_, i) => (
                           <div
                             key={i}
-                            className="w-1 h-8 bg-white/40 rounded-full animate-pulse"
+                            className="w-0.5 h-5 bg-white/40 rounded-full animate-pulse"
                             style={{
                               animationDelay: `${i * 0.3}s`,
                               animationDuration: '2s'
@@ -356,13 +353,13 @@ const Home: React.FC = () => {
                   {/* Orbiting Elements */}
                   <div className="absolute inset-0 animate-spin" style={{ animationDuration: '20s' }}>
                     <div className="relative w-full h-full">
-                      <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-8 w-12 h-12 bg-red-500 rounded-full flex items-center justify-center shadow-lg">
+                      <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-4 w-7 h-7 bg-red-500 rounded-full flex items-center justify-center shadow-lg text-lg">
                         🍅
                       </div>
-                      <div className="absolute bottom-0 right-0 transform translate-x-4 translate-y-4 w-12 h-12 bg-yellow-400 rounded-full flex items-center justify-center shadow-lg">
+                      <div className="absolute bottom-0 right-0 transform translate-x-2 translate-y-2 w-7 h-7 bg-yellow-400 rounded-full flex items-center justify-center shadow-lg text-lg">
                         🧀
                       </div>
-                      <div className="absolute left-0 top-1/2 transform -translate-x-8 -translate-y-1/2 w-12 h-12 bg-green-500 rounded-full flex items-center justify-center shadow-lg">
+                      <div className="absolute left-0 top-1/2 transform -translate-x-4 -translate-y-1/2 w-7 h-7 bg-green-500 rounded-full flex items-center justify-center shadow-lg text-lg">
                         🌿
                       </div>
                     </div>
@@ -372,14 +369,14 @@ const Home: React.FC = () => {
 
               {/* Carousel Indicators */}
               {!isVideoPlaying && (
-                <div className="flex justify-center mt-8 space-x-3">
+                <div className="flex justify-center mt-4 space-x-2">
                   {banners.map((_, index) => (
                     <button
                       key={index}
                       onClick={() => setCurrentBanner(index)}
-                      className={`w-4 h-4 rounded-full transition-all duration-300 ${
+                      className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
                         index === currentBanner 
-                          ? 'bg-gradient-to-r from-red-500 to-orange-500 scale-125' 
+                          ? 'bg-gradient-to-r from-red-500 to-orange-500 scale-110' 
                           : 'bg-white/30 hover:bg-white/50'
                       }`}
                     />

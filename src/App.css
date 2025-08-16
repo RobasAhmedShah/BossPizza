@@ -1269,3 +1269,17 @@ html.smooth-scroll {
 html.page-transition {
   scroll-behavior: auto;
 }
+
+/* Ensure full viewport coverage */
+.hero-section {
+  min-height: 100vh;
+  margin-top: -4rem; /* Negative header height */
+  padding-top: 4rem; /* Positive header height */
+}
+
+@media (min-width: 768px) {
+  .hero-section {
+    margin-top: -5rem; /* Negative header height */
+    padding-top: 5rem; /* Positive header height */
+  }
+}
