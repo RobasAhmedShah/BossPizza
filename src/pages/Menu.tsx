@@ -700,7 +700,7 @@ const Menu: React.FC = () => {
                                         e.stopPropagation();
                                         handlePizzaClick(item);
                                       }}
-                                      className="bg-white/95 backdrop-blur-sm text-primary-600 p-3 rounded-full shadow-xl hover:scale-110 transition-transform duration-200"
+                                      className="bg-white/95 backdrop-blur-sm text-primary-600 p-3 rounded-full shadow-xl hover:scale-110 transition-transform duration-200 flex items-center justify-center"
                                     >
                                       <Plus className="h-5 w-5" />
                                     </button>
@@ -775,7 +775,7 @@ const Menu: React.FC = () => {
                                         text-white rounded-2xl font-bold shadow-lg
                                         hover:from-primary-600 hover:to-primary-700 hover:shadow-xl
                                         active:scale-95 transition-all duration-300 
-                                        flex items-center justify-center space-x-2
+                                        flex items-center justify-center
                                         touch-manipulation focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2
                                         ${animatingItems.includes(item.id) ? 'animate-pulse bg-gradient-to-r from-green-500 to-green-600' : ''}
                                         ${viewMode === 'list' 
@@ -788,13 +788,15 @@ const Menu: React.FC = () => {
                                       {/* Animated background */}
                                       <div className="absolute inset-0 bg-gradient-to-r from-primary-600 to-primary-700 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300 rounded-2xl"></div>
                                       
-                                      <Plus className={`relative z-10 transition-transform duration-200 ${
-                                        viewMode === 'list' ? 'h-3.5 w-3.5' : 'h-4 w-4 group-hover/btn:rotate-90'
-                                      }`} />
-                                      {viewMode !== 'list' && (
-                                        <span className="relative z-10 text-sm font-bold">
+                                      {viewMode === 'list' ? (
+                                        <Plus className="relative z-10 transition-transform duration-200 h-3.5 w-3.5 group-hover/btn:rotate-90" />
+                                      ) : (
+                                        <div className="relative z-10 flex items-center space-x-2">
+                                          <Plus className="h-4 w-4 group-hover/btn:rotate-90 transition-transform duration-200" />
+                                          <span className="text-sm font-bold">
                                           {item.sizes.length > 1 ? 'Choose' : 'Add'}
                                         </span>
+                                        </div>
                                       )}
                                     </button>
                                   </div>
@@ -1033,9 +1035,10 @@ const Menu: React.FC = () => {
       {totalItems > 0 && isMobile && (
         <div className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-lg border-t border-gray-200 p-3 z-[55] shadow-2xl safe-area-bottom">
           <div className="max-w-sm mx-auto">
+            <div className="flex items-center space-x-2">
             <AnimatedButton
               onClick={handleSliderCheckout}
-              className="w-full bg-gradient-to-r from-primary-500 to-primary-600 text-white px-4 py-3 rounded-xl font-bold flex items-center justify-between shadow-lg hover:shadow-xl transition-all duration-300 group min-h-[48px] touch-manipulation"
+                className="flex-1 bg-gradient-to-r from-primary-500 to-primary-600 text-white px-4 py-3 rounded-xl font-bold flex items-center justify-between shadow-lg hover:shadow-xl transition-all duration-300 group min-h-[48px] touch-manipulation"
             >
               <div className="flex items-center space-x-3">
                 <div className="relative">
@@ -1056,6 +1059,22 @@ const Menu: React.FC = () => {
                 <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
               </div>
             </AnimatedButton>
+              
+              {/* Close Cart Button */}
+              <button
+                onClick={() => {
+                  // Clear all items from cart
+                  items.forEach((item) => {
+                    const itemKey = generateItemKey(item);
+                    removeItem(itemKey);
+                  });
+                }}
+                className="bg-gray-100 hover:bg-gray-200 text-gray-600 p-3 rounded-xl transition-colors duration-200 min-h-[48px] min-w-[48px] flex items-center justify-center touch-manipulation"
+                aria-label="Close cart"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
           </div>
         </div>
       )}

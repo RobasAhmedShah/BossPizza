@@ -335,6 +335,24 @@ const Cart: React.FC = () => {
 
         {/* Mobile Bottom Checkout Bar */}
         <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t shadow-2xl p-4 z-50">
+          {/* Header with Close Button */}
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-bold text-gray-900">Your Cart</h3>
+            <button
+              onClick={() => {
+                // Clear all items from cart
+                items.forEach((item) => {
+                  const itemKey = generateItemKey(item);
+                  removeItem(itemKey);
+                });
+              }}
+              className="p-2 text-gray-400 hover:text-red-500 transition-colors rounded-full hover:bg-gray-100"
+              aria-label="Clear cart"
+            >
+              <X className="h-5 w-5" />
+            </button>
+          </div>
+
           {/* Free Shipping Progress - Mobile */}
           {remainingForFreeShipping > 0 && (
             <div className="mb-4 p-3 bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl border border-green-100">
