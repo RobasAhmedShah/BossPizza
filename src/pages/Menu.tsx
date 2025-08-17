@@ -84,11 +84,13 @@ const Menu: React.FC = () => {
 
   // Transform categories for navigation - Memoized to prevent unnecessary re-computation
   const navigationCategories = React.useMemo(() => 
-    categories.map(cat => ({
-      id: cat.slug,
-      name: cat.name,
-      icon: cat.icon
-    })), [categories]
+    categories
+      .sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0))
+      .map(cat => ({
+        id: cat.slug,
+        name: cat.name,
+        icon: cat.icon
+      })), [categories]
   );
 
   // Handle category navigation
@@ -270,20 +272,26 @@ const Menu: React.FC = () => {
       });
     }
 
-    // Apply sorting
-    filtered.sort((a, b) => {
-      switch (sortBy) {
-        case 'price':
-          const aMinPrice = Math.min(...a.sizes.map(s => s.price));
-          const bMinPrice = Math.min(...b.sizes.map(s => s.price));
-          return aMinPrice - bMinPrice;
-        case 'rating':
-          return b.rating - a.rating;
-        case 'name':
-        default:
-          return a.name.localeCompare(b.name);
-      }
-    });
+    // Apply sorting - but maintain original sort_order if no specific sorting is applied
+    if (sortBy === 'name' && !searchTerm && priceFilter === 'all') {
+      // Keep original sort_order from database
+      filtered.sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0));
+    } else {
+      // Apply user-selected sorting
+      filtered.sort((a, b) => {
+        switch (sortBy) {
+          case 'price':
+            const aMinPrice = Math.min(...a.sizes.map(s => s.price));
+            const bMinPrice = Math.min(...b.sizes.map(s => s.price));
+            return aMinPrice - bMinPrice;
+          case 'rating':
+            return b.rating - a.rating;
+          case 'name':
+          default:
+            return a.name.localeCompare(b.name);
+        }
+      });
+    }
 
     return filtered;
   }, [searchTerm, priceFilter, sortBy]);
@@ -366,153 +374,138 @@ const Menu: React.FC = () => {
         <div className={`w-full transition-all duration-300 ${
           totalItems > 0 && !isMobile ? 'lg:mr-96' : ''
         }`}>
-          {/* Enhanced Mobile Header - Fixed positioning with proper spacing */}
-          <div className="bg-white/95 backdrop-blur-md shadow-sm sticky top-16 md:top-20 z-40 border-b border-gray-100 ">
-            <div className="max-w-5xl mx-auto px-3 sm:px-4 lg:px-8 py-2 sm:py-3 lg:py-1">
-              {/* Title and View Controls */}
-              <div className="flex items-center justify-between mb-1 sm:mb-2">
-                <h1 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900">Our Menu</h1>
-                
-                {/* Desktop View Mode Toggle */}
-                <div className="hidden sm:flex items-center space-x-2">
-                  <button
-                    onClick={() => setViewMode('grid')}
-                    className={`p-2 rounded-lg transition-colors ${
-                      viewMode === 'grid' ? 'bg-primary-100 text-primary-600' : 'text-gray-400 hover:text-gray-600'
-                    }`}
-                  >
-                    <Grid className="h-5 w-5" />
-                  </button>
-                  <button
-                    onClick={() => setViewMode('list')}
-                    className={`p-2 rounded-lg transition-colors ${
-                      viewMode === 'list' ? 'bg-primary-100 text-primary-600' : 'text-gray-400 hover:text-gray-600'
-                    }`}
-                  >
-                    <List className="h-5 w-5" />
-                  </button>
-                </div>
-              </div>
-              
-              {/* Enhanced Search and Filter Bar */}
-              <div className="space-y-1 sm:space-y-2">
-                {/* Advanced Search Bar */}
-                <div className="relative">
-                  <div className="relative">
-                    <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 transition-colors" />
-                    <input
-                      type="text"
-                      placeholder="Search dishes, cuisine, ingredients..."
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                      className="w-full pl-12 pr-12 py-2 border-2 border-gray-200 rounded-2xl focus:outline-none focus:ring-0 focus:border-primary-500 transition-all hover:border-gray-300 text-base bg-gray-50 focus:bg-white"
-                      style={{ fontSize: '16px' }} // Prevents zoom on iOS
-                      autoComplete="off"
-                      spellCheck="false"
-                    />
-                    {searchTerm && (
-                      <button
-                        onClick={() => setSearchTerm('')}
-                        className="absolute right-4 top-1/2 transform -translate-y-1/2 p-1 text-gray-400 hover:text-gray-600 transition-colors"
-                      >
-                        <X className="h-4 w-4" />
-                      </button>
-                    )}
-                  </div>
-                  
-                  {/* Search Results Count */}
-                  {searchTerm && (
-                    <div className="absolute top-full left-0 right-0 mt-1 bg-white rounded-xl shadow-lg border border-gray-100 p-3 z-50">
-                      <p className="text-sm text-gray-600">
-                        Found {Object.values(menuItems).flat().filter(item =>
-                          item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                          item.description.toLowerCase().includes(searchTerm.toLowerCase())
-                        ).length} results for "{searchTerm}"
-                      </p>
-                    </div>
-                  )}
-                </div>
+                     {/* Compact Menu Header */}
+           <div className="bg-white/95 backdrop-blur-md shadow-sm sticky top-16 md:top-20 z-40 border-b border-gray-100">
+             <div className="max-w-5xl mx-auto px-3 sm:px-4 lg:px-6 py-1">
+               {/* Compact Title and Controls Row */}
+               <div className="flex items-center justify-between gap-4 mb-1">
+                 <h1 className="text-base sm:text-lg lg:text-xl font-bold text-gray-900 flex-shrink-0">Our Menu</h1>
+                 
+                 {/* Compact Search Bar */}
+                 <div className="flex-1 max-w-md relative">
+                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                   <input
+                     type="text"
+                     placeholder="Search menu..."
+                     value={searchTerm}
+                     onChange={(e) => setSearchTerm(e.target.value)}
+                     className="w-full pl-9 pr-8 py-1.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-primary-500 focus:border-primary-500 text-sm bg-gray-50 focus:bg-white"
+                     style={{ fontSize: '16px' }}
+                     autoComplete="off"
+                     spellCheck="false"
+                   />
+                   {searchTerm && (
+                     <button
+                       onClick={() => setSearchTerm('')}
+                       className="absolute right-2 top-1/2 transform -translate-y-1/2 p-0.5 text-gray-400 hover:text-gray-600"
+                     >
+                       <X className="h-3 w-3" />
+                     </button>
+                   )}
+                 </div>
 
-                {/* Filter and Sort Controls */}
-                <div className="flex items-center gap-3">
-                  <button
-                    onClick={() => setShowFilters(!showFilters)}
-                    className={`flex items-center space-x-2 px-2 py-1.5 rounded-xl text-sm font-semibold transition-all touch-manipulation min-h-[36px] ${
-                      showFilters 
-                        ? 'bg-primary-500 text-white shadow-lg' 
-                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                    }`}
-                  >
-                    <Filter className="h-4 w-4" />
-                    <span>Filters</span>
-                    {showFilters && <div className="w-2 h-2 bg-white rounded-full animate-pulse" />}
-                  </button>
+                 {/* Compact Controls */}
+                 <div className="flex items-center gap-2">
+                   <button
+                     onClick={() => setShowFilters(!showFilters)}
+                     className={`flex items-center space-x-1 px-2 py-1 rounded-lg text-xs font-medium transition-all ${
+                       showFilters 
+                         ? 'bg-primary-500 text-white' 
+                         : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                     }`}
+                   >
+                     <Filter className="h-3 w-3" />
+                     <span className="hidden sm:inline">Filter</span>
+                   </button>
 
-                  <div className="flex-1" />
+                   <select
+                     value={sortBy}
+                     onChange={(e) => setSortBy(e.target.value as any)}
+                     className="px-2 py-1 bg-gray-100 border-0 rounded-lg text-xs font-medium text-gray-600 focus:outline-none focus:bg-white focus:ring-1 focus:ring-primary-500 appearance-none bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIiIGhlaWdodD0iOCIgdmlld0JveD0iMCAwIDEyIDgiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxwYXRoIGQ9Ik0xIDFMNiA2TDExIDEiIHN0cm9rZT0iIzZCNzI4MCIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KPHN2Zz4=')] bg-no-repeat bg-right-2 bg-center pr-6"
+                   >
+                     <option value="name">Name</option>
+                     <option value="price">Price</option>
+                     <option value="rating">Rating</option>
+                   </select>
 
-                  <select
-                    value={sortBy}
-                    onChange={(e) => setSortBy(e.target.value as any)}
-                    className="px-2 py-1.5 bg-gray-100 border-0 rounded-xl text-sm font-semibold text-gray-700 focus:outline-none focus:bg-white focus:ring-2 focus:ring-primary-500 min-h-[36px] appearance-none bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIiIGhlaWdodD0iOCIgdmlld0JveD0iMCAwIDEyIDgiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxwYXRoIGQ9Ik0xIDFMNiA2TDExIDEiIHN0cm9rZT0iIzZCNzI4MCIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KPHN2Zz4=')] bg-no-repeat bg-right-3 bg-center pr-10"
-                  >
-                    <option value="name">Sort by Name</option>
-                    <option value="price">Sort by Price</option>
-                    <option value="rating">Sort by Rating</option>
-                  </select>
-                </div>
+                   {/* Desktop View Mode Toggle */}
+                   <div className="hidden lg:flex items-center space-x-1">
+                     <button
+                       onClick={() => setViewMode('grid')}
+                       className={`p-1 rounded transition-colors ${
+                         viewMode === 'grid' ? 'bg-primary-100 text-primary-600' : 'text-gray-400 hover:text-gray-600'
+                       }`}
+                     >
+                       <Grid className="h-3 w-3" />
+                     </button>
+                     <button
+                       onClick={() => setViewMode('list')}
+                       className={`p-1 rounded transition-colors ${
+                         viewMode === 'list' ? 'bg-primary-100 text-primary-600' : 'text-gray-400 hover:text-gray-600'
+                       }`}
+                     >
+                       <List className="h-3 w-3" />
+                     </button>
+                   </div>
+                 </div>
+               </div>
 
-                {/* Expandable Filters */}
-                {showFilters && (
-                  <div className="bg-gradient-to-r from-gray-50 to-gray-100 rounded-2xl p-4 sm:p-6 space-y-4 animate-slide-down border border-gray-200">
-                    <div>
-                      <label className="block text-base font-semibold text-gray-900 mb-3">Price Range</label>
-                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                        {[
-                          { value: 'all', label: 'All Prices', icon: '💰' },
-                          { value: 'under15', label: 'Under $15', icon: '🔥' },
-                          { value: '15to25', label: '$15 - $25', icon: '⭐' },
-                          { value: 'over25', label: 'Over $25', icon: '👑' }
-                        ].map((option) => (
-                          <button
-                            key={option.value}
-                            onClick={() => setPriceFilter(option.value as any)}
-                            className={`px-4 py-3 rounded-xl text-sm font-semibold transition-all touch-manipulation min-h-[52px] border-2 ${
-                              priceFilter === option.value
-                                ? 'bg-primary-500 text-white border-primary-500 shadow-lg transform scale-105'
-                                : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50 hover:border-gray-300'
-                            }`}
-                          >
-                            <div className="flex flex-col items-center space-y-1">
-                              <span className="text-lg">{option.icon}</span>
-                              <span>{option.label}</span>
-                            </div>
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
+               {/* Compact Expandable Filters */}
+               {showFilters && (
+                 <div className="bg-gray-50 rounded-lg p-2 mb-1 border border-gray-200">
+                   <div className="flex items-center gap-2 flex-wrap">
+                     <span className="text-xs font-medium text-gray-700 mr-2">Price:</span>
+                     {[
+                       { value: 'all', label: 'All' },
+                       { value: 'under15', label: '<$15' },
+                       { value: '15to25', label: '$15-25' },
+                       { value: 'over25', label: '>$25' }
+                     ].map((option) => (
+                       <button
+                         key={option.value}
+                         onClick={() => setPriceFilter(option.value as any)}
+                         className={`px-2 py-1 rounded text-xs font-medium transition-all ${
+                           priceFilter === option.value
+                             ? 'bg-primary-500 text-white'
+                             : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'
+                         }`}
+                       >
+                         {option.label}
+                       </button>
+                     ))}
+                   </div>
+                 </div>
+               )}
 
-            {/* Enhanced Category Navigation */}
-            <div className="mt-2 sm:mt-4">
-              <CategoryNavigation
-                categories={navigationCategories}
-                activeCategory={activeSection}
-                onCategoryClick={handleCategoryClick}
-                isUserScrolling={isUserScrolling}
-              />
-            </div>
-          </div>
+               {/* Search Results Count */}
+               {searchTerm && (
+                 <div className="text-xs text-gray-500 mb-1">
+                   {Object.values(menuItems).flat().filter(item =>
+                     item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                     item.description.toLowerCase().includes(searchTerm.toLowerCase())
+                   ).length} results for "{searchTerm}"
+                 </div>
+               )}
+             </div>
 
-          {/* Menu Content - Added proper top padding for mobile */}
-          <div className="max-w-5xl mx-auto px-3 sm:px-4 lg:px-8 py-6 sm:py-8 lg:py-10 pt-8 md:pt-10">
-            {/* Create Your Own Pizza Section - Prominent placement */}
-            {!isLoading && isInitialized && (
-              <ScrollReveal delay={50}>
-                <section className="mb-12 sm:mb-16 lg:mb-20">
-                  <div className="bg-gradient-to-br from-primary-50 to-orange-50 rounded-2xl p-5 sm:p-6 mt-4 lg:p-8 mt-4 border-2 border-primary-100 shadow-lg hover:shadow-xl transition-all duration-300 relative overflow-hidden group">
+             {/* Compact Category Navigation */}
+             <div className="border-t border-gray-100">
+               <CategoryNavigation
+                 categories={navigationCategories}
+                 activeCategory={activeSection}
+                 onCategoryClick={handleCategoryClick}
+                 isUserScrolling={isUserScrolling}
+               />
+             </div>
+           </div>
+
+                     {/* Menu Content - Compact spacing */}
+           <div className="max-w-5xl mx-auto px-3 sm:px-4 lg:px-6 py-2 sm:py-3 lg:py-4">
+                         {/* Create Your Own Pizza Section - Compact */}
+             {!isLoading && isInitialized && (
+               <ScrollReveal delay={50}>
+                 <section className="mb-4 sm:mb-6 lg:mb-8">
+                   <div className="bg-gradient-to-br from-primary-50 to-orange-50 rounded-xl p-3 sm:p-4 lg:p-5 border border-primary-200 shadow-sm hover:shadow-md transition-all duration-300 relative overflow-hidden group">
                     {/* Animated background elements */}
                     <div className="absolute inset-0 bg-gradient-to-r from-primary-200/20 to-orange-200/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                     <div className="absolute -top-4 -right-4 w-24 h-24 bg-gradient-to-br from-primary-300/30 to-orange-300/30 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700" />
@@ -594,30 +587,33 @@ const Menu: React.FC = () => {
               </div>
             ) : (
               [
-                ...Object.entries(menuItems).map(([categorySlug, categoryItems]) => {
-                  const category = categories.find(c => c.slug === categorySlug);
-                  const items = filteredItems(categoryItems);
-                  
-                  if (items.length === 0 && searchTerm) return null;
-                  
-                  return (
-                    <ScrollReveal key={categorySlug} delay={100}>
-                      <section
-                        ref={(el) => {
-                          if (el) menuSectionsRef.current[categorySlug] = el;
-                        }}
-                        className="mb-6 sm:mb-8 lg:mb-10 scroll-mt-52 md:scroll-mt-56"
-                        id={`section-${categorySlug}`}
-                      >
+                // Sort categories by their sort_order and then map through them
+                ...categories
+                  .sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0))
+                  .map((category) => {
+                    const categoryItems = menuItems[category.slug] || [];
+                    const items = filteredItems(categoryItems);
+                    
+                    if (items.length === 0 && searchTerm) return null;
+                    
+                    return (
+                      <ScrollReveal key={category.slug} delay={100}>
+                        <section
+                          ref={(el) => {
+                            if (el) menuSectionsRef.current[category.slug] = el;
+                          }}
+                          className="mb-3 sm:mb-4 lg:mb-6 scroll-mt-52 md:scroll-mt-56"
+                          id={`section-${category.slug}`}
+                        >
                         {/* Section Header */}
                         <div className="flex items-center justify-between mb-2 sm:mb-3 lg:mb-4 px-1">
                           <div className="flex items-center min-w-0 flex-1">
                             <div className="flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 bg-gradient-to-br from-primary-100 to-primary-200 rounded-xl flex items-center justify-center mr-3">
-                              <span className="text-lg sm:text-xl lg:text-2xl">{category?.icon}</span>
+                              <span className="text-lg sm:text-xl lg:text-2xl">{category.icon}</span>
                             </div>
                             <div className="min-w-0 flex-1">
                               <h2 className="text-base sm:text-lg lg:text-xl xl:text-2xl font-bold text-gray-900 truncate">
-                                {category?.name}
+                                {category.name}
                               </h2>
                               
 
@@ -677,22 +673,8 @@ const Menu: React.FC = () => {
                                   {/* Shimmer effect on hover */}
                                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 transform -skew-x-12 translate-x-[-100%] group-hover:translate-x-[200%]" />
                                   
-                                  {/* Rating Badge - Floating design */}
-                                  <div className="absolute top-3 right-3 bg-black/80 backdrop-blur-sm rounded-full px-2.5 py-1.5 flex items-center space-x-1 shadow-lg border border-white/20">
-                                    <Star className="h-3 w-3 text-yellow-400 fill-current" />
-                                    <span className="text-xs font-bold text-white">{item.rating}</span>
-                                  </div>
-
-                                  {/* Popular Badge - Foodpanda style */}
-                                  {item.is_popular && (
-                                    <div className="absolute top-3 left-3 bg-gradient-to-r from-orange-500 to-red-500 text-white px-3 py-1.5 rounded-full shadow-lg">
-                                      <span className="text-xs font-bold flex items-center space-x-1">
-                                        <span>🔥</span>
-                                        <span>POPULAR</span>
-                                      </span>
-                                    </div>
-                                  )}
                                   
+                                 
                                   {/* Quick add button overlay */}
                                   <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                                     <button
@@ -845,11 +827,11 @@ const Menu: React.FC = () => {
                       ref={(el) => {
                         if (el) menuSectionsRef.current['deals'] = el;
                       }}
-                      className="mb-6 sm:mb-8 lg:mb-10 scroll-mt-52 md:scroll-mt-56"
+                                               className="mb-3 sm:mb-4 lg:mb-6 scroll-mt-52 md:scroll-mt-56"
                       id="section-deals"
                     >
                       {/* Section Header */}
-                                              <div className="flex items-center justify-between mb-2 sm:mb-3 lg:mb-4 px-1">
+                                              <div className="flex items-center justify-between mb-1 sm:mb-2 lg:mb-3 px-1">
                         <div className="flex items-center min-w-0 flex-1">
                           <div className="flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 bg-gradient-to-br from-primary-100 to-primary-200 rounded-xl flex items-center justify-center mr-3">
                             <span className="text-lg sm:text-xl lg:text-2xl">🔥</span>

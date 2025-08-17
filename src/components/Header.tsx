@@ -320,7 +320,7 @@ const Header: React.FC = () => {
               )}
             </button>
 
-            {/* Logo - Enhanced for dark theme */}
+            {/* Logo - Enhanced and Larger */}
             <div className="flex-1 flex justify-center md:justify-start md:ml-8">
               <Link 
                 to="/" 
@@ -328,7 +328,7 @@ const Header: React.FC = () => {
                 className="flex items-center touch-manipulation group"
                 aria-label="Big Boss Pizza - Go to homepage"
               >
-                <div className={`relative p-3 rounded-xl transition-all duration-300 ${
+                <div className={`relative p-2 rounded-xl transition-all duration-300 ${
                   isHomePage 
                     ? 'hover:bg-white/10' 
                     : 'hover:bg-gray-50'
@@ -336,13 +336,29 @@ const Header: React.FC = () => {
                   <img 
                     src="/BBP.svg" 
                     alt="Big Boss Pizza" 
-                    className={`h-8 w-auto transition-all duration-300 group-hover:scale-110 ${
-                      isHomePage ? 'filter brightness-0 invert' : ''
+                    className={`h-10 md:h-12 lg:h-14 w-auto transition-all duration-300 group-hover:scale-110 ${
+                      isHomePage 
+                        ? 'drop-shadow-2xl filter contrast-125 saturate-110' 
+                        : 'drop-shadow-sm'
                     }`}
                   />
                   {isHomePage && (
-                    <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-red-500/20 to-orange-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-red-500/20 to-orange-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   )}
+                </div>
+                
+                {/* Optional: Add text logo next to image on larger screens */}
+                <div className={`hidden lg:block ml-3 transition-all duration-300 ${
+                  isHomePage ? 'text-white' : 'text-gray-900'
+                }`}>
+                  <div className="text-xl font-bold tracking-tight">
+                    Big Boss Pizza
+                  </div>
+                  <div className={`text-xs font-medium ${
+                    isHomePage ? 'text-gray-300' : 'text-gray-500'
+                  }`}>
+                    Authentic Italian Taste
+                  </div>
                 </div>
               </Link>
             </div>
