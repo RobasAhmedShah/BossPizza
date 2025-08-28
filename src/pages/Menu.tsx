@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Search, Plus, Star, ShoppingCart, X, ArrowRight, Filter, Grid, List } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useCart } from '../contexts/CartContext';
 import { useToast } from '../hooks/useToast';
 import { useSmartScroll } from '../hooks/useSmartScroll';
@@ -33,11 +33,14 @@ const Menu: React.FC = () => {
   const [priceFilter, setPriceFilter] = useState<'all' | 'under15' | '15to25' | 'over25'>('all');
   const [sortBy, setSortBy] = useState<'name' | 'price' | 'rating'>('name');
   const [isInitialized, setIsInitialized] = useState(false);
+  const [selectedPizzaId, setSelectedPizzaId] = useState<string | null>(null);
+  const [hasScrolledToPizza, setHasScrolledToPizza] = useState(false);
   
   const { addItem, items, totalItems, totalPrice, updateQuantity, removeItem, generateItemKey } = useCart();
   const { toasts, addToast } = useToast();
   const { categories, menuItems, deals, isLoading, error } = useMenu();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   
   const menuSectionsRef = useRef<{ [key: string]: HTMLElement }>({});
 
@@ -81,6 +84,57 @@ const Menu: React.FC = () => {
     debounceDelay: 250,
     scrollOffset: isMobile ? 200 : 200, // Increased offset to account for sticky header
   });
+
+  // Handle URL parameter for pizza selection
+  useEffect(() => {
+    const pizzaId = searchParams.get('pizza');
+    
+    // Reset scroll state when URL changes
+    if (pizzaId !== selectedPizzaId) {
+      setHasScrolledToPizza(false);
+    }
+    
+    if (pizzaId && !isLoading && Object.keys(menuItems).length > 0 && !hasScrolledToPizza) {
+      setSelectedPizzaId(pizzaId);
+      
+      // Flatten menuItems to search through all items
+      const allMenuItems = Object.values(menuItems).flat();
+      const pizza = allMenuItems.find((item: MenuItem) => item.id === pizzaId);
+      if (pizza) {
+        setHasScrolledToPizza(true);
+        
+        // Wait for DOM to be ready and then scroll
+        const scrollToPizza = () => {
+          // First scroll to the category
+          const categorySlug = pizza.category.slug;
+          scrollToSection(categorySlug);
+          
+          // Then scroll to the specific pizza with a longer delay
+          setTimeout(() => {
+            const pizzaElement = document.getElementById(`pizza-${pizzaId}`);
+            if (pizzaElement) {
+              pizzaElement.scrollIntoView({
+                behavior: 'smooth',
+                block: 'center',
+              });
+              
+              // Add highlight effect
+              pizzaElement.classList.add('highlight-pizza');
+              setTimeout(() => {
+                pizzaElement.classList.remove('highlight-pizza');
+              }, 3000);
+            } else {
+              // If element not found, try again after a short delay
+              setTimeout(scrollToPizza, 200);
+            }
+          }, 1000);
+        };
+        
+        // Start the scroll process with a longer initial delay
+        setTimeout(scrollToPizza, 500);
+      }
+    }
+  }, [searchParams, menuItems, isLoading, scrollToSection, hasScrolledToPizza, selectedPizzaId]);
 
   // Transform categories for navigation - Memoized to prevent unnecessary re-computation
   const navigationCategories = React.useMemo(() => 
@@ -596,6 +650,183 @@ const Menu: React.FC = () => {
                     
                     if (items.length === 0 && searchTerm) return null;
                     
+                    // Special handling for drinks category - use database sort order
+                    if (category.slug === 'drinks') {
+                      // Use the database sort order which is already organized by category
+                      const sortedDrinks = categoryItems.sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0));
+                      
+                      return (
+                        <ScrollReveal key={category.slug} delay={100}>
+                          <section
+                            ref={(el) => {
+                              if (el) menuSectionsRef.current[category.slug] = el;
+                            }}
+                            className="mb-3 sm:mb-4 lg:mb-6 scroll-mt-52 md:scroll-mt-56"
+                            id={`section-${category.slug}`}
+                          >
+                            {/* Section Header */}
+                            <div className="flex items-center justify-between mb-2 sm:mb-3 lg:mb-4 px-1">
+                              <div className="flex items-center min-w-0 flex-1">
+                                <div className="flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 bg-gradient-to-br from-primary-100 to-primary-200 rounded-xl flex items-center justify-center mr-3">
+                                  <span className="text-lg sm:text-xl lg:text-2xl">{category.icon}</span>
+                                </div>
+                                <div className="min-w-0 flex-1">
+                                  <h2 className="text-base sm:text-lg lg:text-xl xl:text-2xl font-bold text-gray-900 truncate">
+                                    {category.name}
+                                  </h2>
+                                  <p className="text-sm text-gray-500 mt-1">All {sortedDrinks.length} drinks organized by type</p>
+                                </div>
+                              </div>
+                              <div className="flex-shrink-0 ml-2">
+                                <span className="inline-flex items-center px-2.5 py-1 bg-gray-50 text-gray-600 rounded-full text-xs sm:text-sm font-medium border border-gray-200">
+                                  {sortedDrinks.length}
+                                </span>
+                              </div>
+                            </div>
+
+                            {/* Menu Items Grid/List - All drinks in organized order */}
+                            <div className={`grid gap-2 sm:gap-2 lg:gap-3 ${
+                              viewMode === 'grid' 
+                                ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3' 
+                                : 'grid-cols-1'
+                            }`}>
+                              {sortedDrinks.map((item: MenuItem, index: number) => (
+                                <ScrollReveal key={item.id} delay={index * 10}>
+                                  <div 
+                                    id={`pizza-${item.id}`}
+                                    className={`
+                                    bg-white rounded-2xl shadow-sm hover:shadow-xl active:shadow-lg
+                                    transition-all duration-500 overflow-hidden group 
+                                    hover:-translate-y-1 active:translate-y-0 menu-item-card
+                                    border border-gray-100 hover:border-primary-300
+                                    ${viewMode === 'list' ? 'flex' : 'flex flex-col'}
+                                    relative cursor-pointer transform-gpu
+                                  `}>
+                                    {/* Image Section */}
+                                    <div className={`relative overflow-hidden bg-gray-50 ${
+                                      viewMode === 'list' 
+                                        ? 'w-16 sm:w-20 lg:w-24 h-16 sm:h-20 lg:h-24 flex-shrink-0' 
+                                        : 'w-full aspect-[4/3] sm:aspect-[3/2]'
+                                    }`} style={{ contain: 'layout' }}>
+                                      <img
+                                        src={item.image_url}
+                                        alt={item.name}
+                                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 menu-item-image"
+                                        loading="lazy"
+                                        sizes={viewMode === 'list' ? '80px' : '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw'}
+                                        onError={(e) => {
+                                          const target = e.target as HTMLImageElement;
+                                          target.style.display = 'none';
+                                          target.nextElementSibling?.classList.remove('hidden');
+                                        }}
+                                      />
+                                      {/* Fallback placeholder */}
+                                      <div className="hidden absolute inset-0 bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center">
+                                        <span className="text-gray-500 text-2xl">🥤</span>
+                                      </div>
+                                      
+                                      {/* Enhanced overlay with better gradient */}
+                                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                                      
+                                      {/* Shimmer effect on hover */}
+                                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 transform -skew-x-12 translate-x-[-100%] group-hover:translate-x-[200%]" />
+                                      
+                                      {/* Quick add button overlay */}
+                                      <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                        <button
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            handlePizzaClick(item);
+                                          }}
+                                          className="bg-white/95 backdrop-blur-sm text-primary-600 p-3 rounded-full shadow-xl hover:scale-110 transition-transform duration-200 flex items-center justify-center"
+                                        >
+                                          <Plus className="h-5 w-5" />
+                                        </button>
+                                      </div>
+                                    </div>
+                                    
+                                    {/* Content Section */}
+                                    <div className={`p-3 sm:p-4 flex flex-col justify-between flex-1 ${
+                                      viewMode === 'list' ? 'min-w-0' : ''
+                                    }`}>
+                                      <div className="flex-1 mb-3">
+                                        <h3 className={`font-bold text-gray-900 mb-2 leading-tight ${
+                                          viewMode === 'list' 
+                                            ? 'text-sm sm:text-base line-clamp-2' 
+                                            : 'text-base sm:text-lg lg:text-xl'
+                                        }`}>
+                                          {item.name}
+                                        </h3>
+                                        <p className={`text-gray-600 leading-relaxed ${
+                                          viewMode === 'list' 
+                                            ? 'text-xs line-clamp-1' 
+                                            : 'text-sm mb-2 line-clamp-2'
+                                        }`}>
+                                          {item.description}
+                                        </p>
+                                      </div>
+                                      
+                                      {/* Price and Add Button */}
+                                      <div className={`flex items-center justify-between ${
+                                        viewMode === 'list' ? 'mt-2' : 'mt-auto'
+                                      }`}>
+                                        <div className="flex-1">
+                                          <div className="flex items-baseline space-x-2">
+                                            <span className={`font-bold text-primary-600 ${
+                                              viewMode === 'list' 
+                                                ? 'text-base' 
+                                                : 'text-lg sm:text-xl'
+                                            }`}>
+                                              PKR {item.sizes[0]?.price.toLocaleString() || 'N/A'}
+                                            </span>
+                                          </div>
+                                          
+                                          <div className="flex items-center space-x-1 mt-1">
+                                            <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                                            <span className="text-xs text-green-600 font-medium">25-30 min</span>
+                                          </div>
+                                        </div>
+                                        
+                                        <button
+                                          onClick={() => handlePizzaClick(item)}
+                                          className={`
+                                            relative overflow-hidden bg-gradient-to-r from-primary-500 to-primary-600 
+                                            text-white rounded-2xl font-bold shadow-lg
+                                            hover:from-primary-600 hover:to-primary-700 hover:shadow-xl
+                                            active:scale-95 transition-all duration-300 
+                                            flex items-center justify-center
+                                            touch-manipulation focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2
+                                            ${animatingItems.includes(item.id) ? 'animate-pulse bg-gradient-to-r from-green-500 to-green-600' : ''}
+                                            ${viewMode === 'list' 
+                                              ? 'w-9 h-9 rounded-full' 
+                                              : 'px-3 py-2.5 min-h-[44px]'
+                                            }
+                                            hover:scale-105 group/btn
+                                          `}
+                                        >
+                                          {/* Animated background */}
+                                          <div className="absolute inset-0 bg-gradient-to-r from-primary-600 to-primary-700 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300 rounded-2xl"></div>
+                                          
+                                          {viewMode === 'list' ? (
+                                            <Plus className="relative z-10 transition-transform duration-200 h-3.5 w-3.5 group-hover/btn:rotate-90" />
+                                          ) : (
+                                            <div className="relative z-10 flex items-center space-x-2">
+                                              <Plus className="h-4 w-4 group-hover/btn:rotate-90 transition-transform duration-200" />
+                                              <span className="text-sm font-bold">Add</span>
+                                            </div>
+                                          )}
+                                        </button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </ScrollReveal>
+                              ))}
+                            </div>
+                          </section>
+                        </ScrollReveal>
+                      );
+                    }
+                    
                     return (
                       <ScrollReveal key={category.slug} delay={100}>
                         <section
@@ -636,7 +867,9 @@ const Menu: React.FC = () => {
                         }`}>
                           {items.map((item, index) => (
                             <ScrollReveal key={item.id} delay={index * 20}>
-                              <div                                 className={`
+                              <div 
+                                id={`pizza-${item.id}`}
+                                className={`
                                 bg-white rounded-2xl shadow-sm hover:shadow-xl active:shadow-lg
                                 transition-all duration-500 overflow-hidden group 
                                 hover:-translate-y-1 active:translate-y-0 menu-item-card

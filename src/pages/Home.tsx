@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Plus, Star, Clock, Truck, Play, ArrowRight, Flame, Zap, Send, User, MessageCircle } from 'lucide-react';
 import { useCart } from '../contexts/CartContext';
 import { useMenu } from '../hooks/useMenu';
@@ -16,6 +16,7 @@ const Home: React.FC = () => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [selectedPizza, setSelectedPizza] = useState<MenuItem | null>(null);
   const [showSizeSelector, setShowSizeSelector] = useState(false);
+  const navigate = useNavigate();
   const [reviews, setReviews] = useState([
     {
       id: 1,
@@ -113,16 +114,10 @@ const Home: React.FC = () => {
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
-  // Handle pizza selection - show size selector for signature pizzas
+  // Handle pizza selection - navigate to menu page with pizza ID
   const handlePizzaClick = (item: any) => {
-    // Check if it's a signature pizza (has multiple sizes)
-    if (item.category === 'signature-pizzas' && item.sizes.length > 1) {
-      setSelectedPizza(item);
-      setShowSizeSelector(true);
-    } else {
-      // For items with single size, add directly
-      handleDirectAddToCart(item, item.sizes[0]);
-    }
+    // Navigate to menu page with pizza ID as URL parameter
+    navigate(`/menu?pizza=${item.id}`);
   };
 
   // Enhanced add to cart with size selection
@@ -581,7 +576,7 @@ const Home: React.FC = () => {
                         </div>
                         
                         <button
-                          onClick={() => handleAddToCart(item)}
+                          onClick={() => handlePizzaClick(item)}
                           className="relative overflow-hidden bg-gradient-to-r from-primary-500 to-primary-600 text-white rounded-2xl font-bold shadow-lg hover:from-primary-600 hover:to-primary-700 hover:shadow-xl active:scale-95 transition-all duration-300 flex items-center justify-center space-x-2 touch-manipulation focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 px-3 py-2.5 min-h-[44px] hover:scale-105 group/btn"
                         >
                           {/* Animated background */}
@@ -589,7 +584,7 @@ const Home: React.FC = () => {
                           
                           <Plus className="relative z-10 transition-transform duration-200 h-4 w-4 group-hover/btn:rotate-90" />
                           <span className="relative z-10 text-sm font-bold">
-                            {item.sizes.length > 1 ? 'Choose' : 'Add'}
+                            Choose
                           </span>
                         </button>
                       </div>
