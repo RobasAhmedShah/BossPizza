@@ -1,5 +1,5 @@
 import React from 'react';
-import { Award, Users, Clock, Heart } from 'lucide-react';
+import { Award, Users, Clock, Heart, Target, Zap, Crown } from 'lucide-react';
 
 const About: React.FC = () => {
   return (
@@ -37,36 +37,49 @@ const About: React.FC = () => {
           {/* Scrollable Content */}
           <div className="space-y-8">
             <div>
-              <h2 className="text-4xl font-bold text-gray-900 mb-6">Our Story</h2>
+              <h2 className="text-4xl font-bold text-gray-900 mb-6">THE BIG BOSS VISION</h2>
               
               <div className="prose prose-lg text-gray-600 leading-relaxed space-y-6">
+                <p className="text-2xl font-bold text-primary-600 text-center py-4 border-l-4 border-primary-600 pl-4">
+                  At Big Boss Pizza, we don't serve old tales — we serve the future of pizza, hot and fresh.
+                </p>
+
                 <p>
-                  At the heart of our pizza journey is our CEO, <strong>Iftikhar Tahir</strong>, a passionate traveler who has explored flavors from the bustling streets of New York to the charming alleys of Rome. Inspired by the authenticity, depth, and culture found in Italian and American pizzerias, he returned to Pakistan with a vision: to create a world-class pizza brand right here at home.
+                  Our goal is clear:
+                </p>
+
+                <div className="bg-gradient-to-r from-orange-50 to-red-50 p-6 rounded-xl border-l-4 border-orange-500">
+                  <div className="flex items-center space-x-3 mb-3">
+                    <Target className="h-6 w-6 text-orange-600" />
+                    <span className="text-lg font-bold text-gray-900">👉 To become Pakistan's fastest-growing pizza franchise, opening 25 branches in the next 10 years.</span>
+                  </div>
+                </div>
+
+                <p>
+                  We're on a mission to serve pizzas made with freshly prepared dough, premium cheese, garden-fresh vegetables, and our signature organic sauces — delivering the perfect balance of flavor, freshness, and satisfaction.
+                </p>
+
+                <p className="text-xl font-semibold text-gray-800 text-center py-4">
+                  But Big Boss Pizza is more than food.
+                </p>
+
+                <p className="text-xl font-semibold text-gray-800 text-center py-4">
+                  It's an idea.
                 </p>
 
                 <p className="text-2xl font-bold text-primary-600 text-center py-4">
-                  This isn't just another pizza joint. It's a movement.
+                  A belief that everyone can "Be Your Own Big Boss."
                 </p>
 
-                <p>
-                  Every slice we serve is a result of dedication to quality, culture, and authenticity. From hand-stretched dough fermented to perfection, to sauces simmered with herbs imported straight from Italy—our pizzas are not only delicious, they're an experience.
-                </p>
-
-                <p>
-                  We believe pizza is more than food—it's a cultural celebration. Our interior reflects warmth, our staff greets you like family, and our kitchen? It's where tradition and innovation blend in harmony.
-                </p>
-
-                <p>
-                  Whether you're a fan of crispy New York-style thin crust, deep-dish goodness, or rustic Italian Margherita, we've got something that'll remind you of your travels—or spark your craving for new ones.
-                </p>
-
-                <p>
-                  So come in, take a bite, and become a part of a story that's just getting started.
-                </p>
-
-                <p className="text-2xl font-bold text-primary-600 text-center py-4">
-                  This is not just pizza. This is passion—baked to perfection.
-                </p>
+                <div className="bg-gradient-to-r from-red-50 to-orange-50 p-6 rounded-xl">
+                  <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center space-x-2">
+                    <Crown className="h-6 w-6 text-red-600" />
+                    <span>Our Promise</span>
+                  </h3>
+                  <p className="text-gray-700">
+                    Every pizza we serve is crafted with the same passion and dedication that drives us to be the best. From our kitchen to your table, we ensure that every bite delivers the authentic taste of Italy with a Pakistani twist.
+                  </p>
+                </div>
               </div>
             </div>
 
@@ -74,10 +87,10 @@ const About: React.FC = () => {
             <div className="grid grid-cols-2 gap-6 mt-12">
               <div className="bg-white rounded-xl p-6 shadow-lg text-center">
                 <div className="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Clock className="h-6 w-6 text-primary-600" />
+                  <Zap className="h-6 w-6 text-primary-600" />
                 </div>
-                <div className="text-3xl font-bold text-gray-900 mb-2">40+</div>
-                <div className="text-gray-600">Years of Excellence</div>
+                <div className="text-3xl font-bold text-gray-900 mb-2">25</div>
+                <div className="text-gray-600">Branches Target</div>
               </div>
 
               <div className="bg-white rounded-xl p-6 shadow-lg text-center">
@@ -92,8 +105,8 @@ const About: React.FC = () => {
                 <div className="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Award className="h-6 w-6 text-primary-600" />
                 </div>
-                <div className="text-3xl font-bold text-gray-900 mb-2">15+</div>
-                <div className="text-gray-600">Awards Won</div>
+                <div className="text-3xl font-bold text-gray-900 mb-2">10</div>
+                <div className="text-gray-600">Years Vision</div>
               </div>
 
               <div className="bg-white rounded-xl p-6 shadow-lg text-center">
@@ -135,6 +148,13 @@ const About: React.FC = () => {
                   <div>
                     <h4 className="font-semibold text-gray-900">Innovation</h4>
                     <p className="text-gray-600">We blend traditional methods with modern techniques.</p>
+                  </div>
+                </div>
+                <div className="flex items-start space-x-3">
+                  <div className="w-2 h-2 bg-primary-600 rounded-full mt-2 flex-shrink-0"></div>
+                  <div>
+                    <h4 className="font-semibold text-gray-900">Boss Mentality</h4>
+                    <p className="text-gray-600">We empower everyone to be their own boss through quality and service.</p>
                   </div>
                 </div>
               </div>

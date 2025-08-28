@@ -25,11 +25,11 @@ const Checkout: React.FC = () => {
     firstName: '',
     lastName: '',
     company: '',
-    country: 'United States',
-    state: '',
+    country: 'Pakistan',
+    province: '',
     address: '',
     city: '',
-    zipCode: '',
+    postalCode: '',
     phone: '',
     email: '',
     shipToDifferent: false,
@@ -45,19 +45,31 @@ const Checkout: React.FC = () => {
   const [showCoupon, setShowCoupon] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
+  // Pakistani cities by province
+  const pakistaniCities = {
+    'Sindh': ['Karachi', 'Hyderabad', 'Sukkur', 'Larkana', 'Nawabshah', 'Mirpur Khas'],
+    'Punjab': ['Lahore', 'Faisalabad', 'Rawalpindi', 'Multan', 'Gujranwala', 'Sialkot', 'Bahawalpur', 'Sargodha'],
+    'Khyber Pakhtunkhwa': ['Peshawar', 'Mardan', 'Abbottabad', 'Swat', 'Nowshera', 'Charsadda'],
+    'Balochistan': ['Quetta', 'Gwadar', 'Turbat', 'Khuzdar', 'Chaman', 'Loralai'],
+    'Gilgit-Baltistan': ['Gilgit', 'Skardu', 'Hunza', 'Chilas', 'Astore'],
+    'Azad Kashmir': ['Muzaffarabad', 'Mirpur', 'Kotli', 'Rawalakot', 'Bagh']
+  };
+
+  const provinces = Object.keys(pakistaniCities);
+
   // Address suggestions for autocomplete
   const addressSuggestions = [
-    '123 Main Street, New York, NY',
-    '456 Oak Avenue, Los Angeles, CA',
-    '789 Pine Road, Chicago, IL',
-    '321 Elm Street, Houston, TX',
-    '654 Maple Drive, Phoenix, AZ',
+    'Block 6, PECHS, Karachi, Pakistan',
+    'Gulberg III, Lahore, Pakistan',
+    'Blue Area, Islamabad, Pakistan',
+    'Jinnah Road, Quetta, Pakistan',
+    'University Road, Peshawar, Pakistan',
   ];
 
   // Calculate totals
   const subtotal = totalPrice;
-  const deliveryFee = subtotal >= 50 ? 0 : 4.99;
-  const tax = subtotal * 0.08; // 8% tax
+  const deliveryFee = subtotal >= 2000 ? 0 : 200; // Free delivery over PKR 2000
+  const tax = subtotal * 0.15; // 15% tax for Pakistan
   const finalTotal = subtotal + deliveryFee + tax;
 
   const handleInputChange = (field: string, value: string | boolean) => {
@@ -73,7 +85,7 @@ const Checkout: React.FC = () => {
     const newErrors: Record<string, string> = {};
     
     // Required fields
-    const required = ['firstName', 'lastName', 'state', 'address', 'city', 'zipCode', 'phone', 'email'];
+    const required = ['firstName', 'lastName', 'province', 'address', 'city', 'postalCode', 'phone', 'email'];
     required.forEach(field => {
       if (!formData[field as keyof typeof formData]) {
         newErrors[field] = 'This field is required';
@@ -91,8 +103,8 @@ const Checkout: React.FC = () => {
     }
 
     // ZIP code validation
-    if (formData.zipCode && !/^\d{5}(-\d{4})?$/.test(formData.zipCode)) {
-      newErrors.zipCode = 'Please enter a valid ZIP code';
+    if (formData.postalCode && !/^\d{5}(-\d{4})?$/.test(formData.postalCode)) {
+      newErrors.postalCode = 'Please enter a valid ZIP code';
     }
 
     // Payment validation
@@ -166,8 +178,8 @@ const Checkout: React.FC = () => {
         delivery_address: {
           street: formData.address,
           city: formData.city,
-          state: formData.state,
-          zipCode: formData.zipCode,
+          state: formData.province,
+          zipCode: formData.postalCode,
           country: formData.country
         },
         order_notes: formData.orderNotes || undefined,
@@ -208,7 +220,7 @@ const Checkout: React.FC = () => {
         estimatedDeliveryTime: new Date(createdOrder.estimated_delivery_time || ''),
         totalAmount: createdOrder.total_amount,
         customerName: `${formData.firstName} ${formData.lastName}`,
-        deliveryAddress: `${formData.address}, ${formData.city}, ${formData.state}`,
+        deliveryAddress: `${formData.address}, ${formData.city}, ${formData.province}`,
         createdAt: new Date(createdOrder.created_at)
       });
       
@@ -241,11 +253,11 @@ const Checkout: React.FC = () => {
         firstName: '',
         lastName: '',
         company: '',
-        country: 'United States',
-        state: '',
+        country: 'Pakistan',
+        province: '',
         address: '',
         city: '',
-        zipCode: '',
+        postalCode: '',
         phone: '',
         email: '',
         shipToDifferent: false,
@@ -410,19 +422,34 @@ const Checkout: React.FC = () => {
                       onChange={(e) => handleInputChange('country', e.target.value)}
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all hover:border-gray-400"
                     >
-                      <option value="United States">United States</option>
-                      <option value="Canada">Canada</option>
-                      <option value="United Kingdom">United Kingdom</option>
+                      <option value="Pakistan">Pakistan</option>
                     </select>
                   </div>
 
-                  <FloatingLabel
-                    label="State"
-                    value={formData.state}
-                    onChange={(value) => handleInputChange('state', value)}
-                    error={errors.state}
-                    required
-                  />
+                                      <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Province <span className="text-red-500">*</span>
+                      </label>
+                      <select
+                        value={formData.province}
+                        onChange={(e) => handleInputChange('province', e.target.value)}
+                        className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all hover:border-gray-400 ${
+                          errors.province ? 'border-red-500' : 'border-gray-300'
+                        }`}
+                      >
+                        <option value="">Select a province</option>
+                        {provinces.map(province => (
+                          <optgroup key={province} label={province}>
+                            {pakistaniCities[province as keyof typeof pakistaniCities].map(city => (
+                              <option key={city} value={city}>{city}</option>
+                            ))}
+                          </optgroup>
+                        ))}
+                      </select>
+                      {errors.province && (
+                        <p className="mt-1 text-sm text-red-600">{errors.province}</p>
+                      )}
+                    </div>
                 </div>
 
                 <FloatingLabel
@@ -437,7 +464,7 @@ const Checkout: React.FC = () => {
                     if (parts.length >= 3) {
                       handleInputChange('address', parts[0]);
                       handleInputChange('city', parts[1]);
-                      handleInputChange('state', parts[2].split(' ')[0]);
+                      handleInputChange('province', parts[2].split(' ')[0]);
                     }
                   }}
                 />
@@ -452,10 +479,10 @@ const Checkout: React.FC = () => {
                   />
 
                   <FloatingLabel
-                    label="ZIP Code"
-                    value={formData.zipCode}
-                    onChange={(value) => handleInputChange('zipCode', value)}
-                    error={errors.zipCode}
+                    label="Postal Code"
+                    value={formData.postalCode}
+                    onChange={(value) => handleInputChange('postalCode', value)}
+                    error={errors.postalCode}
                     required
                   />
                 </div>
@@ -553,7 +580,7 @@ const Checkout: React.FC = () => {
                   <span>PKR {subtotal.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-gray-600">
-                  <span>Tax (8%)</span>
+                  <span>Tax (15%)</span>
                   <span>PKR {tax.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-gray-600">

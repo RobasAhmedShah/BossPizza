@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { Plus, Star, Clock, Truck, Play, ArrowRight, Flame, Zap, Send, User, MessageCircle } from 'lucide-react';
 import { useCart } from '../contexts/CartContext';
 import { useMenu } from '../hooks/useMenu';
+import { MenuItem, MenuItemSize } from '../lib/supabase';
+import PizzaSizeSelector from '../components/PizzaSizeSelector';
 
 import ScrollReveal from '../components/ui/ScrollReveal';
 import ParallaxSection from '../components/ui/ParallaxSection';
@@ -12,6 +14,8 @@ const Home: React.FC = () => {
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isLoaded, setIsLoaded] = useState(false);
+  const [selectedPizza, setSelectedPizza] = useState<MenuItem | null>(null);
+  const [showSizeSelector, setShowSizeSelector] = useState(false);
   const [reviews, setReviews] = useState([
     {
       id: 1,
@@ -108,6 +112,38 @@ const Home: React.FC = () => {
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
+
+  // Handle pizza selection - show size selector for signature pizzas
+  const handlePizzaClick = (item: any) => {
+    // Check if it's a signature pizza (has multiple sizes)
+    if (item.category === 'signature-pizzas' && item.sizes.length > 1) {
+      setSelectedPizza(item);
+      setShowSizeSelector(true);
+    } else {
+      // For items with single size, add directly
+      handleDirectAddToCart(item, item.sizes[0]);
+    }
+  };
+
+  // Enhanced add to cart with size selection
+  const handleAddToCartWithSize = (item: MenuItem, selectedSize: MenuItemSize) => {
+    handleDirectAddToCart(item, selectedSize);
+  };
+
+  // Direct add to cart for items without size selection
+  const handleDirectAddToCart = (item: any, selectedSize: any) => {
+    addItem({
+      id: item.id,
+      name: item.name,
+      price: selectedSize.price,
+      image: item.image,
+      category: item.category,
+      options: {
+        size: selectedSize.size_name,
+        price: selectedSize.price
+      }
+    });
+  };
 
   const handleAddToCart = (item: any) => {
     // For items with multiple sizes, use the smallest size
@@ -666,7 +702,7 @@ const Home: React.FC = () => {
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
-                            handleAddToCart(item);
+                            handlePizzaClick(item);
                           }}
                           className="bg-white/95 backdrop-blur-sm text-primary-600 p-3 rounded-full shadow-xl hover:scale-110 transition-transform duration-200"
                         >
@@ -721,7 +757,7 @@ const Home: React.FC = () => {
                         </div>
                         
                         <button
-                          onClick={() => handleAddToCart(item)}
+                          onClick={() => handlePizzaClick(item)}
                           className="relative overflow-hidden bg-gradient-to-r from-primary-500 to-primary-600 text-white rounded-2xl font-bold shadow-lg hover:from-primary-600 hover:to-primary-700 hover:shadow-xl active:scale-95 transition-all duration-300 flex items-center justify-center space-x-2 touch-manipulation focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 px-3 py-2.5 min-h-[44px] hover:scale-105 group/btn"
                         >
                           {/* Animated background */}
@@ -1128,6 +1164,19 @@ const Home: React.FC = () => {
           </div>
         </div>
       </section>
+
+      {/* Pizza Size Selector Modal */}
+      {selectedPizza && (
+        <PizzaSizeSelector
+          pizza={selectedPizza}
+          isOpen={showSizeSelector}
+          onClose={() => {
+            setShowSizeSelector(false);
+            setSelectedPizza(null);
+          }}
+          onAddToCart={handleAddToCartWithSize}
+        />
+      )}
     </div>
   );
 };

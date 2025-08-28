@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import { CartProvider } from './contexts/CartContext';
 import { OrderTrackingProvider } from './contexts/OrderTrackingContext';
@@ -22,33 +22,31 @@ function App() {
     <AuthProvider>
       <CartProvider>
         <OrderTrackingProvider>
-          <Router>
-            {/* Global scroll restoration component */}
-            <ScrollToTop 
-              behavior="auto"
-              delay={0}
-              excludePaths={['/dashboard']} // Exclude dashboard from auto scroll restoration
-            />
-            
-            <Routes>
-              <Route path="/dashboard/*" element={<Dashboard />} />
-              <Route path="/*" element={
-                <Layout>
-                  <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/menu" element={<Menu />} />
-                    <Route path="/about" element={<About />} />
-                    <Route path="/gallery" element={<Gallery />} />
-                    <Route path="/blog" element={<Blog />} />
-                    <Route path="/cart" element={<Cart />} />
-                    <Route path="/checkout" element={<Checkout />} />
-                    <Route path="/branches" element={<Branches />} />
-                    <Route path="/contact" element={<Contact />} />
-                  </Routes>
-                </Layout>
-              } />
-            </Routes>
-          </Router>
+          {/* Global scroll restoration component */}
+          <ScrollToTop 
+            behavior="auto"
+            delay={0}
+            excludePaths={['/dashboard']} // Exclude dashboard from auto scroll restoration
+          />
+          
+          <Routes>
+            <Route path="/dashboard/*" element={<Dashboard />} />
+            <Route path="/*" element={
+              <Layout>
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/menu" element={<Menu />} />
+                  <Route path="/about" element={<About />} />
+                  <Route path="/gallery" element={<Gallery />} />
+                  <Route path="/blog" element={<Blog />} />
+                  <Route path="/cart" element={<Cart />} />
+                  <Route path="/checkout" element={<Checkout />} />
+                  <Route path="/branches" element={<Branches />} />
+                  <Route path="/contact" element={<Contact />} />
+                </Routes>
+              </Layout>
+            } />
+          </Routes>
         </OrderTrackingProvider>
       </CartProvider>
     </AuthProvider>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, MapPin, Phone, Clock, Plus, Minus } from 'lucide-react';
+import { Search, MapPin, Phone, Clock, Plus, Minus, AlertCircle } from 'lucide-react';
 
 const Branches: React.FC = () => {
   const [selectedCity, setSelectedCity] = useState('');
@@ -8,67 +8,33 @@ const Branches: React.FC = () => {
   const [mapZoom, setMapZoom] = useState(12);
 
   const cities = [
-    'New York',
-    'Los Angeles',
-    'Chicago',
-    'Houston',
-    'Phoenix',
-    'Philadelphia',
-    'San Antonio',
-    'San Diego',
+    'Karachi',
+    'Quetta'
   ];
 
   const branches = [
     {
       id: 1,
-      name: 'Big Boss Pizza - Times Square',
-      address: '1234 Broadway, New York, NY 10001',
-      city: 'New York',
-      phone: '+1 (555) 123-4567',
+      name: 'Big Boss Pizza - Karachi Main',
+      address: 'Block 6, PECHS, Karachi, Pakistan',
+      city: 'Karachi',
+      phone: '+92 21 1234 5678',
       hours: 'Mon-Sun: 11 AM - 11 PM',
-      coordinates: { lat: 40.7580, lng: -73.9855 },
+      coordinates: { lat: 24.8607, lng: 67.0011 },
       image: 'https://images.pexels.com/photos/1581384/pexels-photo-1581384.jpeg?auto=compress&cs=tinysrgb&w=400',
+      status: 'available'
     },
     {
       id: 2,
-      name: 'Big Boss Pizza - Brooklyn Heights',
-      address: '567 Atlantic Ave, Brooklyn, NY 11217',
-      city: 'New York',
-      phone: '+1 (555) 234-5678',
-      hours: 'Mon-Sun: 11 AM - 12 AM',
-      coordinates: { lat: 40.6892, lng: -73.9942 },
+      name: 'Big Boss Pizza - Quetta Central',
+      address: 'Jinnah Road, Quetta, Pakistan',
+      city: 'Quetta',
+      phone: 'Coming Soon',
+      hours: 'Coming Soon',
+      coordinates: { lat: 30.1798, lng: 66.9750 },
       image: 'https://images.pexels.com/photos/1581384/pexels-photo-1581384.jpeg?auto=compress&cs=tinysrgb&w=400',
-    },
-    {
-      id: 3,
-      name: 'Big Boss Pizza - Hollywood',
-      address: '890 Sunset Blvd, Los Angeles, CA 90028',
-      city: 'Los Angeles',
-      phone: '+1 (555) 345-6789',
-      hours: 'Mon-Sun: 10 AM - 1 AM',
-      coordinates: { lat: 34.0928, lng: -118.3287 },
-      image: 'https://images.pexels.com/photos/1581384/pexels-photo-1581384.jpeg?auto=compress&cs=tinysrgb&w=400',
-    },
-    {
-      id: 4,
-      name: 'Big Boss Pizza - Santa Monica',
-      address: '321 Ocean Ave, Santa Monica, CA 90401',
-      city: 'Los Angeles',
-      phone: '+1 (555) 456-7890',
-      hours: 'Mon-Sun: 11 AM - 11 PM',
-      coordinates: { lat: 34.0195, lng: -118.4912 },
-      image: 'https://images.pexels.com/photos/1581384/pexels-photo-1581384.jpeg?auto=compress&cs=tinysrgb&w=400',
-    },
-    {
-      id: 5,
-      name: 'Big Boss Pizza - Downtown Chicago',
-      address: '456 Michigan Ave, Chicago, IL 60611',
-      city: 'Chicago',
-      phone: '+1 (555) 567-8901',
-      hours: 'Mon-Sun: 11 AM - 10 PM',
-      coordinates: { lat: 41.8781, lng: -87.6298 },
-      image: 'https://images.pexels.com/photos/1581384/pexels-photo-1581384.jpeg?auto=compress&cs=tinysrgb&w=400',
-    },
+      status: 'coming-soon'
+    }
   ];
 
   const filteredBranches = branches.filter(branch => {
@@ -143,18 +109,31 @@ const Branches: React.FC = () => {
                   key={branch.id}
                   className={`bg-white rounded-2xl shadow-sm p-6 cursor-pointer transition-all hover:shadow-md ${
                     selectedBranch?.id === branch.id ? 'ring-2 ring-primary-500 bg-primary-50' : ''
-                  }`}
+                  } ${branch.status === 'coming-soon' ? 'opacity-75' : ''}`}
                   onClick={() => handleViewDetails(branch)}
                 >
                   <div className="flex items-start space-x-4">
-                    <div className="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center flex-shrink-0">
-                      <MapPin className="h-6 w-6 text-primary-600" />
+                    <div className={`w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 ${
+                      branch.status === 'coming-soon' ? 'bg-yellow-100' : 'bg-primary-100'
+                    }`}>
+                      {branch.status === 'coming-soon' ? (
+                        <AlertCircle className="h-6 w-6 text-yellow-600" />
+                      ) : (
+                        <MapPin className="h-6 w-6 text-primary-600" />
+                      )}
                     </div>
                     
                     <div className="flex-1 min-w-0">
-                      <h3 className="text-lg font-semibold text-gray-900 mb-1">
-                        {branch.name}
-                      </h3>
+                      <div className="flex items-center space-x-2 mb-1">
+                        <h3 className="text-lg font-semibold text-gray-900">
+                          {branch.name}
+                        </h3>
+                        {branch.status === 'coming-soon' && (
+                          <span className="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs font-medium rounded-full">
+                            Coming Soon
+                          </span>
+                        )}
+                      </div>
                       <p className="text-gray-600 text-sm mb-2">{branch.address}</p>
                       
                       <div className="flex items-center space-x-4 text-sm text-gray-500">
@@ -233,6 +212,11 @@ const Branches: React.FC = () => {
                         <span>{selectedBranch.phone}</span>
                         <span>{selectedBranch.hours}</span>
                       </div>
+                      {selectedBranch.status === 'coming-soon' && (
+                        <div className="mt-3 p-2 bg-yellow-50 border border-yellow-200 rounded-lg">
+                          <p className="text-yellow-800 text-sm font-medium">🚧 Coming Soon - Stay tuned for updates!</p>
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>
@@ -241,16 +225,24 @@ const Branches: React.FC = () => {
                 {filteredBranches.map((branch, index) => (
                   <div
                     key={branch.id}
-                    className={`absolute w-8 h-8 bg-primary-600 rounded-full flex items-center justify-center cursor-pointer transform -translate-x-1/2 -translate-y-1/2 hover:scale-110 transition-transform ${
+                    className={`absolute w-8 h-8 rounded-full flex items-center justify-center cursor-pointer transform -translate-x-1/2 -translate-y-1/2 hover:scale-110 transition-transform ${
+                      branch.status === 'coming-soon' 
+                        ? 'bg-yellow-500 hover:bg-yellow-600' 
+                        : 'bg-primary-600 hover:bg-primary-700'
+                    } ${
                       selectedBranch?.id === branch.id ? 'ring-4 ring-primary-200 scale-110' : ''
                     }`}
                     style={{
-                      left: `${20 + (index % 3) * 30}%`,
-                      top: `${30 + Math.floor(index / 3) * 25}%`,
+                      left: `${20 + (index % 2) * 60}%`,
+                      top: `${30 + Math.floor(index / 2) * 40}%`,
                     }}
                     onClick={() => handleViewDetails(branch)}
                   >
-                    <MapPin className="h-4 w-4 text-white" />
+                    {branch.status === 'coming-soon' ? (
+                      <AlertCircle className="h-4 w-4 text-white" />
+                    ) : (
+                      <MapPin className="h-4 w-4 text-white" />
+                    )}
                   </div>
                 ))}
               </div>
