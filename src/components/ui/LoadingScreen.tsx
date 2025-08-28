@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { menuAPI } from '../../lib/supabase';
+import { sessionManager } from '../../lib/SessionManager';
 
 // Global data store for pre-fetched data
 export const preloadedData = {
@@ -8,7 +9,8 @@ export const preloadedData = {
   deals: null as any,
   isLoaded: false,
   error: null as string | null,
-  loadTime: 0
+  loadTime: 0,
+  fromCache: false
 };
 
 // Critical images to preload
@@ -133,62 +135,105 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ onDataLoaded }) => {
   useEffect(() => {
     const startTime = performance.now();
     
-    const preloadAllData = async () => {
+    const initializeApp = async () => {
       try {
         // Initialize performance optimizations
         addCacheHeaders();
         preloadFonts();
         
-        setCurrentStep(0);
-        setProgress(10);
-        setLoadingText(loadingSteps[0].text);
+        // Initialize session and check for cached data
+        const session = sessionManager.initializeSession();
+        const cachedMenuData = sessionManager.getMenuData();
         
-        // Step 1: Load categories
-        await new Promise(resolve => setTimeout(resolve, loadingSteps[0].duration));
-        setCurrentStep(1);
-        setProgress(25);
-        setLoadingText(loadingSteps[1].text);
-        
-        const categoriesData = await menuAPI.getCategories();
-        preloadedData.categories = categoriesData;
-        
-        // Step 2: Load menu items
-        await new Promise(resolve => setTimeout(resolve, loadingSteps[1].duration));
-        setCurrentStep(2);
-        setProgress(50);
-        setLoadingText(loadingSteps[2].text);
-        
-        const menuItemsData = await menuAPI.getAllMenuItems();
-        preloadedData.menuItems = menuItemsData;
-        
-        // Step 3: Load deals
-        await new Promise(resolve => setTimeout(resolve, loadingSteps[2].duration));
-        setCurrentStep(3);
-        setProgress(70);
-        setLoadingText(loadingSteps[3].text);
-        
-        const dealsData = await menuAPI.getDeals();
-        preloadedData.deals = dealsData;
-        
-        // Step 4: Preload critical images and menu images
-        await new Promise(resolve => setTimeout(resolve, loadingSteps[3].duration));
-        setCurrentStep(4);
-        setProgress(85);
-        setLoadingText(loadingSteps[4].text);
-        
-        await Promise.all([
-          preloadImages(criticalImages),
-          preloadMenuImages(menuItemsData)
-        ]);
-        
-        // Final step
-        await new Promise(resolve => setTimeout(resolve, loadingSteps[4].duration));
-        setProgress(100);
-        setLoadingText('Welcome to Big Boss Pizza!');
-        
-        // Calculate load time
-        const endTime = performance.now();
-        preloadedData.loadTime = endTime - startTime;
+        if (cachedMenuData && !sessionManager.shouldRefreshMenuData()) {
+          // Use cached data - much faster load
+          console.log('🚀 Loading from cache - instant experience!');
+          setProgress(20);
+          setLoadingText('Restoring your session...');
+          await new Promise(resolve => setTimeout(resolve, 300));
+          
+          setProgress(60);
+          setLoadingText('Loading cached menu...');
+          preloadedData.categories = cachedMenuData.categories;
+          preloadedData.menuItems = cachedMenuData.menuItems;
+          preloadedData.deals = cachedMenuData.deals;
+          preloadedData.fromCache = true;
+          await new Promise(resolve => setTimeout(resolve, 200));
+          
+          setProgress(90);
+          setLoadingText('Preparing your experience...');
+          await preloadImages(criticalImages);
+          await new Promise(resolve => setTimeout(resolve, 200));
+          
+          setProgress(100);
+          setLoadingText('Welcome back to Big Boss Pizza!');
+          
+          // Calculate load time
+          const endTime = performance.now();
+          preloadedData.loadTime = endTime - startTime;
+          preloadedData.isLoaded = true;
+          
+          console.log(`⚡ Cached load completed in ${preloadedData.loadTime.toFixed(0)}ms`);
+        } else {
+          // Fresh data load - normal loading process
+          console.log('🔄 Loading fresh data...');
+          setCurrentStep(0);
+          setProgress(10);
+          setLoadingText(loadingSteps[0].text);
+          
+          // Step 1: Load categories
+          await new Promise(resolve => setTimeout(resolve, loadingSteps[0].duration));
+          setCurrentStep(1);
+          setProgress(25);
+          setLoadingText(loadingSteps[1].text);
+          
+          const categoriesData = await menuAPI.getCategories();
+          preloadedData.categories = categoriesData;
+          
+          // Step 2: Load menu items
+          await new Promise(resolve => setTimeout(resolve, loadingSteps[1].duration));
+          setCurrentStep(2);
+          setProgress(50);
+          setLoadingText(loadingSteps[2].text);
+          
+          const menuItemsData = await menuAPI.getAllMenuItems();
+          preloadedData.menuItems = menuItemsData;
+          
+          // Step 3: Load deals
+          await new Promise(resolve => setTimeout(resolve, loadingSteps[2].duration));
+          setCurrentStep(3);
+          setProgress(70);
+          setLoadingText(loadingSteps[3].text);
+          
+          const dealsData = await menuAPI.getDeals();
+          preloadedData.deals = dealsData;
+          
+          // Save fresh data to cache
+          sessionManager.updateMenuData(categoriesData, menuItemsData, dealsData);
+          
+          // Step 4: Preload critical images and menu images
+          await new Promise(resolve => setTimeout(resolve, loadingSteps[3].duration));
+          setCurrentStep(4);
+          setProgress(85);
+          setLoadingText(loadingSteps[4].text);
+          
+          await Promise.all([
+            preloadImages(criticalImages),
+            preloadMenuImages(menuItemsData)
+          ]);
+          
+          // Final step
+          await new Promise(resolve => setTimeout(resolve, loadingSteps[4].duration));
+          setProgress(100);
+          setLoadingText('Welcome to Big Boss Pizza!');
+          
+          // Calculate load time
+          const endTime = performance.now();
+          preloadedData.loadTime = endTime - startTime;
+          preloadedData.fromCache = false;
+          
+          console.log(`🆕 Fresh load completed in ${preloadedData.loadTime.toFixed(0)}ms`);
+        }
         
         // Mark as loaded
         preloadedData.isLoaded = true;
@@ -207,10 +252,10 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ onDataLoaded }) => {
               loader.remove();
             }, 500);
           }
-        }, 1000);
+        }, 800);
         
       } catch (error) {
-        console.error('Error preloading data:', error);
+        console.error('Error initializing app:', error);
         preloadedData.error = 'Failed to load data';
         setLoadingText('Error loading data. Please refresh the page.');
         
@@ -227,7 +272,7 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ onDataLoaded }) => {
       }
     };
 
-    preloadAllData();
+    initializeApp();
   }, [onDataLoaded]);
 
   return (

@@ -1,8 +1,10 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { sessionManager } from '../lib/SessionManager';
 
 interface User {
   id: string;
   phone: string;
+  email?: string;
   name?: string;
   selectedBranch?: string;
   deliveryAddress?: string;
@@ -26,9 +28,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   useEffect(() => {
     // Check for existing session
-    const savedUser = localStorage.getItem('bigBossUser');
-    if (savedUser) {
-      setUser(JSON.parse(savedUser));
+    const session = sessionManager.loadSession();
+    if (session?.user) {
+      setUser(session.user);
+      console.log('👤 Restored user session from cache');
     }
   }, []);
 
@@ -61,6 +64,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           phone,
         };
         setUser(newUser);
+        sessionManager.updateUser(newUser);
+        // Keep legacy localStorage for backward compatibility
         localStorage.setItem('bigBossUser', JSON.stringify(newUser));
         return true;
       }
@@ -75,6 +80,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const logout = () => {
     setUser(null);
+    sessionManager.updateUser(null);
+    // Keep legacy localStorage for backward compatibility
     localStorage.removeItem('bigBossUser');
   };
 
@@ -82,6 +89,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (user) {
       const updatedUser = { ...user, ...updates };
       setUser(updatedUser);
+      sessionManager.updateUser(updatedUser);
+      // Keep legacy localStorage for backward compatibility
       localStorage.setItem('bigBossUser', JSON.stringify(updatedUser));
     }
   };

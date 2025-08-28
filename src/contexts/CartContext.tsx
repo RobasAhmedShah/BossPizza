@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { sessionManager } from '../lib/SessionManager';
 
 export interface CartItem {
   id: string;
@@ -19,37 +20,75 @@ interface CartContextType {
   updateQuantity: (itemKey: string, quantity: number) => void;
   clearCart: () => void;
   generateItemKey: (item: Omit<CartItem, 'quantity'> | CartItem) => string;
+  forceReloadCart: () => void; // For debugging
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [items, setItems] = useState<CartItem[]>([]);
+  const [isLoaded, setIsLoaded] = useState(false);
 
-  // Load cart from localStorage on mount
+  // Load cart from session on mount
   useEffect(() => {
-    try {
-      const savedCart = localStorage.getItem('bigBossCart');
-      if (savedCart) {
-        const parsedCart = JSON.parse(savedCart);
-        if (Array.isArray(parsedCart)) {
-          setItems(parsedCart);
+    const loadCartData = async () => {
+      try {
+        // Wait a bit to ensure session is initialized
+        await new Promise(resolve => setTimeout(resolve, 100));
+        
+        const session = sessionManager.loadSession();
+        if (session?.cart?.items && Array.isArray(session.cart.items)) {
+          setItems(session.cart.items);
+          console.log(`🛒 Restored ${session.cart.items.length} items from cart cache`);
+        } else {
+          // Fallback to legacy localStorage
+          const savedCart = localStorage.getItem('bigBossCart');
+          if (savedCart) {
+            const parsedCart = JSON.parse(savedCart);
+            if (Array.isArray(parsedCart)) {
+              setItems(parsedCart);
+              console.log(`🛒 Restored ${parsedCart.length} items from legacy localStorage`);
+              // Update session with legacy data
+              sessionManager.updateCart(parsedCart);
+            }
+          }
         }
+      } catch (error) {
+        console.error('Error loading cart from session:', error);
+        // Fallback to localStorage
+        try {
+          const savedCart = localStorage.getItem('bigBossCart');
+          if (savedCart) {
+            const parsedCart = JSON.parse(savedCart);
+            if (Array.isArray(parsedCart)) {
+              setItems(parsedCart);
+              console.log(`🛒 Fallback: Restored ${parsedCart.length} items from localStorage`);
+            }
+          }
+        } catch (fallbackError) {
+          console.error('Error with localStorage fallback:', fallbackError);
+        }
+      } finally {
+        setIsLoaded(true);
       }
-    } catch (error) {
-      console.error('Error loading cart from localStorage:', error);
-      localStorage.removeItem('bigBossCart');
-    }
+    };
+
+    loadCartData();
   }, []);
 
-  // Save cart to localStorage whenever items change
+  // Save cart to session whenever items change (but only after initial load)
   useEffect(() => {
+    if (!isLoaded) return; // Don't save until we've loaded initial data
+    
     try {
+      sessionManager.updateCart(items);
+      // Also keep legacy localStorage for backward compatibility
       localStorage.setItem('bigBossCart', JSON.stringify(items));
+      console.log(`💾 Saved ${items.length} items to cart storage`);
     } catch (error) {
-      console.error('Error saving cart to localStorage:', error);
+      console.error('Error saving cart to session:', error);
     }
-  }, [items]);
+  }, [items, isLoaded]);
 
   const generateItemKey = (item: Omit<CartItem, 'quantity'> | CartItem) => {
     return `${item.id}-${JSON.stringify(item.options || {})}`;
@@ -101,7 +140,40 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const clearCart = () => {
+    console.log('🗑️ Clearing cart');
     setItems([]);
+  };
+
+  const forceReloadCart = () => {
+    console.log('🔄 Force reloading cart from storage');
+    setIsLoaded(false);
+    
+    setTimeout(() => {
+      const loadCartData = async () => {
+        try {
+          const session = sessionManager.loadSession();
+          if (session?.cart?.items && Array.isArray(session.cart.items)) {
+            setItems(session.cart.items);
+            console.log(`🛒 Force restored ${session.cart.items.length} items from session`);
+          } else {
+            const savedCart = localStorage.getItem('bigBossCart');
+            if (savedCart) {
+              const parsedCart = JSON.parse(savedCart);
+              if (Array.isArray(parsedCart)) {
+                setItems(parsedCart);
+                console.log(`🛒 Force restored ${parsedCart.length} items from localStorage`);
+              }
+            }
+          }
+        } catch (error) {
+          console.error('Error force reloading cart:', error);
+        } finally {
+          setIsLoaded(true);
+        }
+      };
+      
+      loadCartData();
+    }, 100);
   };
 
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
@@ -117,6 +189,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
       updateQuantity,
       clearCart,
       generateItemKey,
+      forceReloadCart,
     }}>
       {children}
     </CartContext.Provider>

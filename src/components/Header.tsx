@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { ShoppingCart, User, Menu, X } from 'lucide-react';
+import { ShoppingCart, User, Menu, X, Database } from 'lucide-react';
+import CacheManager from './ui/CacheManager';
 import { useAuth } from '../contexts/AuthContext';
 import { useCart } from '../contexts/CartContext';
 import { useOrderTracking } from '../contexts/OrderTrackingContext';
@@ -26,6 +27,7 @@ interface UserDropdownProps {
   isHomePage: boolean;
   user: User | null;
   onLogout: () => void;
+  onCacheManagerOpen: () => void;
 }
 
 interface MobileMenuProps {
@@ -40,7 +42,7 @@ interface MobileMenuProps {
 }
 
 // Sub-components
-const UserDropdown: React.FC<UserDropdownProps> = ({ isHomePage, user, onLogout }) => (
+const UserDropdown: React.FC<UserDropdownProps> = ({ isHomePage, user, onLogout, onCacheManagerOpen }) => (
   <div className="relative group">
     <button className={`flex items-center space-x-2 p-2 rounded-full transition-all duration-300 touch-manipulation min-h-[44px] group ${
       isHomePage 
@@ -55,6 +57,17 @@ const UserDropdown: React.FC<UserDropdownProps> = ({ isHomePage, user, onLogout 
     <div className={`absolute top-full left-0 mt-1 w-48 rounded-xl shadow-xl py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 ${
       isHomePage ? 'bg-black/90 backdrop-blur-lg border border-white/20' : 'bg-white border border-gray-200'
     }`}>
+      <button
+        onClick={onCacheManagerOpen}
+        className={`flex items-center space-x-2 w-full text-left px-4 py-3 text-sm transition-colors touch-manipulation min-h-[44px] ${
+          isHomePage 
+            ? 'text-white hover:bg-white/10' 
+            : 'text-gray-700 hover:bg-gray-100'
+        }`}
+      >
+        <Database className="h-4 w-4" />
+        <span>Cache Manager</span>
+      </button>
       <button
         onClick={onLogout}
         className={`block w-full text-left px-4 py-3 text-sm transition-colors touch-manipulation min-h-[44px] ${
@@ -149,6 +162,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [isCacheManagerOpen, setIsCacheManagerOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
   
@@ -240,6 +254,15 @@ const Header: React.FC = () => {
     setIsAuthModalOpen(false);
   }, []);
 
+  const handleCacheManagerOpen = useCallback(() => {
+    setIsCacheManagerOpen(true);
+    setIsMenuOpen(false);
+  }, []);
+
+  const handleCacheManagerClose = useCallback(() => {
+    setIsCacheManagerOpen(false);
+  }, []);
+
   // Cart button component
   const CartButton = useCallback(({ className }: { className: string }) => (
     <Link
@@ -289,6 +312,7 @@ const Header: React.FC = () => {
                   isHomePage={isHomePage}
                   user={user}
                   onLogout={handleLogout}
+                  onCacheManagerOpen={handleCacheManagerOpen}
                 />
               ) : (
                 <UserButton 
@@ -435,6 +459,12 @@ const Header: React.FC = () => {
       <AuthModal
         isOpen={isAuthModalOpen}
         onClose={handleAuthModalClose}
+      />
+
+      {/* Cache Manager */}
+      <CacheManager
+        isOpen={isCacheManagerOpen}
+        onClose={handleCacheManagerClose}
       />
     </>
   );

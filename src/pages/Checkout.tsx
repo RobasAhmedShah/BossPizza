@@ -47,12 +47,7 @@ const Checkout: React.FC = () => {
 
   // Pakistani cities by province
   const pakistaniCities = {
-    'Sindh': ['Karachi', 'Hyderabad', 'Sukkur', 'Larkana', 'Nawabshah', 'Mirpur Khas'],
-    'Punjab': ['Lahore', 'Faisalabad', 'Rawalpindi', 'Multan', 'Gujranwala', 'Sialkot', 'Bahawalpur', 'Sargodha'],
-    'Khyber Pakhtunkhwa': ['Peshawar', 'Mardan', 'Abbottabad', 'Swat', 'Nowshera', 'Charsadda'],
-    'Balochistan': ['Quetta', 'Gwadar', 'Turbat', 'Khuzdar', 'Chaman', 'Loralai'],
-    'Gilgit-Baltistan': ['Gilgit', 'Skardu', 'Hunza', 'Chilas', 'Astore'],
-    'Azad Kashmir': ['Muzaffarabad', 'Mirpur', 'Kotli', 'Rawalakot', 'Bagh']
+   Sindh:['Karachi']
   };
 
   const provinces = Object.keys(pakistaniCities);
@@ -203,11 +198,11 @@ const Checkout: React.FC = () => {
       // Create order in database
       const createdOrder = await ordersAPI.createOrder(orderData);
       
-      // Add to active orders tracking
-      addActiveOrder({
+      // Create the active order object
+      const activeOrder = {
         id: createdOrder.id,
         orderNumber: createdOrder.order_number,
-        status: 'confirmed',
+        status: 'confirmed' as const,
         items: items.map(item => ({
           name: item.name,
           quantity: item.quantity,
@@ -222,7 +217,21 @@ const Checkout: React.FC = () => {
         customerName: `${formData.firstName} ${formData.lastName}`,
         deliveryAddress: `${formData.address}, ${formData.city}, ${formData.province}`,
         createdAt: new Date(createdOrder.created_at)
-      });
+      };
+
+      // Add to active orders tracking
+      addActiveOrder(activeOrder);
+
+      // Explicitly save to localStorage to ensure persistence
+      try {
+        const existingOrders = localStorage.getItem('bigBossActiveOrders');
+        const orders = existingOrders ? JSON.parse(existingOrders) : [];
+        orders.push(activeOrder);
+        localStorage.setItem('bigBossActiveOrders', JSON.stringify(orders));
+        console.log('Order saved to localStorage:', activeOrder.orderNumber);
+      } catch (error) {
+        console.error('Error saving order to localStorage:', error);
+      }
       
       await new Promise(resolve => setTimeout(resolve, 800));
 

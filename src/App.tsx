@@ -3,6 +3,7 @@ import { Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import { CartProvider } from './contexts/CartContext';
 import { OrderTrackingProvider } from './contexts/OrderTrackingContext';
+import { NavigationProvider } from './contexts/NavigationContext';
 import Layout from './components/Layout';
 import ScrollToTop from './components/ScrollToTop';
 import Home from './pages/Home';
@@ -22,12 +23,13 @@ function App() {
     <AuthProvider>
       <CartProvider>
         <OrderTrackingProvider>
-          {/* Global scroll restoration component */}
-          <ScrollToTop 
-            behavior="auto"
-            delay={0}
-            excludePaths={['/dashboard']} // Exclude dashboard from auto scroll restoration
-          />
+          <NavigationProvider>
+            {/* Global scroll restoration component */}
+            <ScrollToTop 
+              behavior="auto"
+              delay={0}
+              excludePaths={['/dashboard']} // Exclude dashboard from auto scroll restoration
+            />
           
           <Routes>
             <Route path="/dashboard/*" element={<Dashboard />} />
@@ -47,6 +49,7 @@ function App() {
               </Layout>
             } />
           </Routes>
+          </NavigationProvider>
         </OrderTrackingProvider>
       </CartProvider>
     </AuthProvider>

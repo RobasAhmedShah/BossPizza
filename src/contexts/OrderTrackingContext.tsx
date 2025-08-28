@@ -1,6 +1,7 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { ordersAPI, Order } from '../lib/supabase';
 import { useAuth } from './AuthContext';
+import { sessionManager } from '../lib/SessionManager';
 
 export interface ActiveOrder {
   id: string;
@@ -27,41 +28,73 @@ interface OrderTrackingContextType {
   hasActiveOrders: boolean;
   refreshActiveOrders: () => Promise<void>;
   isLoading: boolean;
+  saveOrdersToStorage: () => void;
+  loadOrdersFromStorage: () => void;
 }
 
 const OrderTrackingContext = createContext<OrderTrackingContextType | undefined>(undefined);
+
+// Helper functions for localStorage operations
+const STORAGE_KEY = 'bigBossActiveOrders';
+
+const saveOrdersToStorage = (orders: ActiveOrder[]) => {
+  try {
+    const serializedOrders = orders.map(order => ({
+      ...order,
+      estimatedDeliveryTime: order.estimatedDeliveryTime.toISOString(),
+      createdAt: order.createdAt.toISOString(),
+    }));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(serializedOrders));
+    console.log(`Saved ${orders.length} orders to localStorage`);
+  } catch (error) {
+    console.error('Error saving orders to localStorage:', error);
+  }
+};
+
+const loadOrdersFromStorage = (): ActiveOrder[] => {
+  try {
+    const savedOrders = localStorage.getItem(STORAGE_KEY);
+    if (!savedOrders) return [];
+    
+    const parsedOrders = JSON.parse(savedOrders).map((order: any) => ({
+      ...order,
+      estimatedDeliveryTime: new Date(order.estimatedDeliveryTime),
+      createdAt: new Date(order.createdAt),
+    }));
+    
+    // Filter out expired orders
+    const validOrders = parsedOrders.filter((order: ActiveOrder) => 
+      new Date(order.estimatedDeliveryTime) > new Date()
+    );
+    
+    console.log(`Loaded ${validOrders.length} valid orders from localStorage`);
+    return validOrders;
+  } catch (error) {
+    console.error('Error loading orders from localStorage:', error);
+    localStorage.removeItem(STORAGE_KEY);
+    return [];
+  }
+};
 
 export const OrderTrackingProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [activeOrders, setActiveOrders] = useState<ActiveOrder[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const { user } = useAuth();
 
-  // Load active orders from localStorage on mount
+  // Load active orders from session on mount
   useEffect(() => {
-    try {
-      const savedOrders = localStorage.getItem('bigBossActiveOrders');
-      if (savedOrders) {
-        const parsedOrders = JSON.parse(savedOrders).map((order: any) => ({
-          ...order,
-          estimatedDeliveryTime: new Date(order.estimatedDeliveryTime),
-          createdAt: new Date(order.createdAt),
-        }));
-        
-        // Filter out expired orders
-        const validOrders = parsedOrders.filter((order: ActiveOrder) => 
-          new Date(order.estimatedDeliveryTime) > new Date()
-        );
-        
-        setActiveOrders(validOrders);
-      }
-    } catch (error) {
-      console.error('Error loading active orders:', error);
-      localStorage.removeItem('bigBossActiveOrders');
+    const session = sessionManager.loadSession();
+    if (session?.activeOrders?.orders) {
+      setActiveOrders(session.activeOrders.orders);
+      console.log(`📋 Restored ${session.activeOrders.orders.length} active orders from cache`);
+    } else {
+      const legacyOrders = loadOrdersFromStorage();
+      setActiveOrders(legacyOrders);
     }
   }, []);
 
   // Fetch active orders from database
-  const refreshActiveOrders = async () => {
+  const refreshActiveOrders = useCallback(async () => {
     if (!user?.email) return;
     
     setIsLoading(true);
@@ -98,7 +131,7 @@ export const OrderTrackingProvider: React.FC<{ children: React.ReactNode }> = ({
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [user?.email]);
 
   // Map database order status to ActiveOrder status
   const mapOrderStatus = (dbStatus: string): ActiveOrder['status'] => {
@@ -124,7 +157,7 @@ export const OrderTrackingProvider: React.FC<{ children: React.ReactNode }> = ({
     } else {
       setActiveOrders([]);
     }
-  }, [user?.email]);
+  }, [user?.email, refreshActiveOrders]);
 
   // Set up periodic refresh for active orders
   useEffect(() => {
@@ -135,34 +168,42 @@ export const OrderTrackingProvider: React.FC<{ children: React.ReactNode }> = ({
     }, 30000); // Refresh every 30 seconds
 
     return () => clearInterval(interval);
-  }, [user?.email, activeOrders.length]);
-  // Save active orders to localStorage whenever they change
+  }, [user?.email, activeOrders.length, refreshActiveOrders]);
+
+  // Save active orders to session whenever they change
   useEffect(() => {
-    try {
-      localStorage.setItem('bigBossActiveOrders', JSON.stringify(activeOrders));
-    } catch (error) {
-      console.error('Error saving active orders:', error);
-    }
+    sessionManager.updateActiveOrders(activeOrders);
+    // Also keep legacy localStorage for backward compatibility
+    saveOrdersToStorage(activeOrders);
   }, [activeOrders]);
 
   // Auto-remove expired orders
   useEffect(() => {
     const interval = setInterval(() => {
-      setActiveOrders(prev => 
-        prev.filter(order => new Date(order.estimatedDeliveryTime) > new Date())
-      );
+      setActiveOrders(prev => {
+        const validOrders = prev.filter(order => new Date(order.estimatedDeliveryTime) > new Date());
+        if (validOrders.length !== prev.length) {
+          console.log(`Removed ${prev.length - validOrders.length} expired orders`);
+        }
+        return validOrders;
+      });
     }, 1000);
 
     return () => clearInterval(interval);
   }, []);
 
-  const addActiveOrder = (order: ActiveOrder) => {
-    setActiveOrders(prev => [...prev, order]);
-  };
+  const addActiveOrder = useCallback((order: ActiveOrder) => {
+    setActiveOrders(prev => {
+      const newOrders = [...prev, order];
+      // Immediately save to localStorage
+      saveOrdersToStorage(newOrders);
+      return newOrders;
+    });
+  }, []);
 
-  const updateOrderStatus = (orderId: string, status: ActiveOrder['status'], newEstimatedTime?: Date) => {
-    setActiveOrders(prev => 
-      prev.map(order => 
+  const updateOrderStatus = useCallback((orderId: string, status: ActiveOrder['status'], newEstimatedTime?: Date) => {
+    setActiveOrders(prev => {
+      const updatedOrders = prev.map(order => 
         order.id === orderId 
           ? { 
               ...order, 
@@ -170,22 +211,39 @@ export const OrderTrackingProvider: React.FC<{ children: React.ReactNode }> = ({
               ...(newEstimatedTime && { estimatedDeliveryTime: newEstimatedTime })
             }
           : order
-      )
-    );
-  };
+      );
+      // Immediately save to localStorage
+      saveOrdersToStorage(updatedOrders);
+      return updatedOrders;
+    });
+  }, []);
 
-  const removeActiveOrder = (orderId: string) => {
-    setActiveOrders(prev => prev.filter(order => order.id !== orderId));
-  };
+  const removeActiveOrder = useCallback((orderId: string) => {
+    setActiveOrders(prev => {
+      const filteredOrders = prev.filter(order => order.id !== orderId);
+      // Immediately save to localStorage
+      saveOrdersToStorage(filteredOrders);
+      return filteredOrders;
+    });
+  }, []);
 
-  const getTimeRemaining = (orderId: string): number => {
+  const getTimeRemaining = useCallback((orderId: string): number => {
     const order = activeOrders.find(o => o.id === orderId);
     if (!order) return 0;
     
     const now = new Date().getTime();
     const deliveryTime = new Date(order.estimatedDeliveryTime).getTime();
     return Math.max(0, deliveryTime - now);
-  };
+  }, [activeOrders]);
+
+  const saveOrdersToStorageFn = useCallback(() => {
+    saveOrdersToStorage(activeOrders);
+  }, [activeOrders]);
+
+  const loadOrdersFromStorageFn = useCallback(() => {
+    const orders = loadOrdersFromStorage();
+    setActiveOrders(orders);
+  }, []);
 
   const hasActiveOrders = activeOrders.length > 0;
 
@@ -199,6 +257,8 @@ export const OrderTrackingProvider: React.FC<{ children: React.ReactNode }> = ({
       hasActiveOrders,
       refreshActiveOrders,
       isLoading,
+      saveOrdersToStorage: saveOrdersToStorageFn,
+      loadOrdersFromStorage: loadOrdersFromStorageFn,
     }}>
       {children}
     </OrderTrackingContext.Provider>
