@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { menuAPI, MenuItem, Category, Deal } from '../lib/supabase';
+import { preloadedData } from '../components/ui/LoadingScreen';
 
 export const useMenu = () => {
   const [categories, setCategories] = useState<Category[]>([]);
@@ -9,11 +10,22 @@ export const useMenu = () => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchMenuData = async () => {
+    const initializeMenuData = async () => {
       try {
         setIsLoading(true);
         setError(null);
 
+        // Check if we have preloaded data
+        if (preloadedData.isLoaded && preloadedData.categories && preloadedData.menuItems && preloadedData.deals) {
+          // Use preloaded data
+          setCategories(preloadedData.categories);
+          setMenuItems(preloadedData.menuItems);
+          setDeals(preloadedData.deals);
+          setIsLoading(false);
+          return;
+        }
+
+        // Fallback: fetch data if not preloaded
         const [categoriesData, menuItemsData, dealsData] = await Promise.all([
           menuAPI.getCategories(),
           menuAPI.getAllMenuItems(),
@@ -31,7 +43,7 @@ export const useMenu = () => {
       }
     };
 
-    fetchMenuData();
+    initializeMenuData();
   }, []);
 
   const searchItems = async (query: string): Promise<MenuItem[]> => {
