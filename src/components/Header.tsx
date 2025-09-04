@@ -358,7 +358,7 @@ const Header: React.FC = () => {
                     : 'hover:bg-gray-50'
                 }`}>
                   <img 
-                    src="/BBP.svg" 
+                    src="/BBP.jpg" 
                     alt="Big Boss Pizza" 
                     className={`h-10 md:h-12 lg:h-14 w-auto transition-all duration-300 group-hover:scale-110 ${
                       isHomePage 

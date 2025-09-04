@@ -262,23 +262,56 @@ const Home: React.FC = () => {
               
               </div>
 
-         {/* Oversized Bold Headlines */}
+         {/* Oversized Bold Headlines with Logo */}
 <div className="space-y-3">
   <div className={`transition-all duration-1000 delay-300 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}>
-    <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-black leading-none">
-      <span className="block bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500 bg-clip-text text-transparent animate-pulse">
-        BIG
-      </span>
-      <span className="block bg-gradient-to-r from-yellow-500 via-red-500 to-orange-600 bg-clip-text text-transparent">
-        BOSS
-      </span>
-      <span className="block text-white relative">
-        PIZZA
-        <div className="absolute -top-3 -right-6 animate-bounce">
-          <Flame className="h-6 w-6 text-orange-500" />
+    <div className="flex items-center space-x-8">
+      {/* Logo - On the Left Side */}
+      <div className="hidden lg:block flex-shrink-0">
+        <div className="relative group">
+          {/* Logo Container with Glow Effect */}
+          <div className="relative p-4 rounded-2xl bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm border border-white/20 hover:border-white/40 transition-all duration-500 group-hover:scale-110">
+            <img 
+              src="/BBP.jpg" 
+              alt="Big Boss Pizza Logo" 
+              className="h-20 w-20 sm:h-24 sm:w-24 lg:h-28 lg:w-28 xl:h-32 xl:w-32 object-contain drop-shadow-2xl filter contrast-125 saturate-110 group-hover:scale-105 transition-transform duration-300"
+            />
+            
+            {/* Animated Glow Ring */}
+            <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-red-500/30 to-orange-500/30 opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-pulse"></div>
+            
+            {/* Sparkle Effects */}
+            <div className="absolute -top-2 -right-2 w-4 h-4 bg-yellow-400 rounded-full opacity-75 animate-ping"></div>
+            <div className="absolute -bottom-2 -left-2 w-3 h-3 bg-red-500 rounded-full opacity-60 animate-ping" style={{ animationDelay: '0.5s' }}></div>
+          </div>
+          
+          {/* Floating Badge */}
+          <div className="absolute -bottom-3 -right-3 bg-gradient-to-r from-yellow-500 to-orange-500 text-black px-3 py-1.5 rounded-full shadow-lg">
+            <span className="text-xs font-bold flex items-center space-x-1">
+             
+            </span>
+          </div>
         </div>
-      </span>
-    </h1>
+      </div>
+      
+      {/* Text Content */}
+      <div className="flex-1">
+        <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-black leading-none">
+          <span className="block bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500 bg-clip-text text-transparent animate-pulse">
+            BIG
+          </span>
+          <span className="block bg-gradient-to-r from-yellow-500 via-red-500 to-orange-600 bg-clip-text text-transparent">
+            BOSS
+          </span>
+          <span className="block text-white relative">
+            PIZZA
+            <div className="absolute -top-3 -right-6 animate-bounce">
+              <Flame className="h-6 w-6 text-orange-500" />
+            </div>
+          </span>
+        </h1>
+      </div>
+    </div>
   </div>
   <div className={`transition-all duration-1000 delay-500 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}>
     <p className="text-sm sm:text-lg lg:text-xl font-light text-gray-300 max-w-xl">
