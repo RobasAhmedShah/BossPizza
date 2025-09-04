@@ -654,26 +654,26 @@ const Menu: React.FC = () => {
                     if (category.slug === 'drinks') {
                       // Use the database sort order which is already organized by category
                       const sortedDrinks = categoryItems.sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0));
-                      
-                      return (
-                        <ScrollReveal key={category.slug} delay={100}>
-                          <section
-                            ref={(el) => {
-                              if (el) menuSectionsRef.current[category.slug] = el;
-                            }}
-                            className="mb-3 sm:mb-4 lg:mb-6 scroll-mt-52 md:scroll-mt-56"
-                            id={`section-${category.slug}`}
-                          >
-                            {/* Section Header */}
-                            <div className="flex items-center justify-between mb-2 sm:mb-3 lg:mb-4 px-1">
-                              <div className="flex items-center min-w-0 flex-1">
-                                <div className="flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 bg-gradient-to-br from-primary-100 to-primary-200 rounded-xl flex items-center justify-center mr-3">
-                                  <span className="text-lg sm:text-xl lg:text-2xl">{category.icon}</span>
-                                </div>
-                                <div className="min-w-0 flex-1">
-                                  <h2 className="text-base sm:text-lg lg:text-xl xl:text-2xl font-bold text-gray-900 truncate">
-                                    {category.name}
-                                  </h2>
+                    
+                    return (
+                      <ScrollReveal key={category.slug} delay={100}>
+                        <section
+                          ref={(el) => {
+                            if (el) menuSectionsRef.current[category.slug] = el;
+                          }}
+                          className="mb-3 sm:mb-4 lg:mb-6 scroll-mt-52 md:scroll-mt-56"
+                          id={`section-${category.slug}`}
+                        >
+                        {/* Section Header */}
+                        <div className="flex items-center justify-between mb-2 sm:mb-3 lg:mb-4 px-1">
+                          <div className="flex items-center min-w-0 flex-1">
+                            <div className="flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 bg-gradient-to-br from-primary-100 to-primary-200 rounded-xl flex items-center justify-center mr-3">
+                              <span className="text-lg sm:text-xl lg:text-2xl">{category.icon}</span>
+                            </div>
+                            <div className="min-w-0 flex-1">
+                              <h2 className="text-base sm:text-lg lg:text-xl xl:text-2xl font-bold text-gray-900 truncate">
+                                {category.name}
+                              </h2>
                                   <p className="text-sm text-gray-500 mt-1">All {sortedDrinks.length} drinks organized by type</p>
                                 </div>
                               </div>

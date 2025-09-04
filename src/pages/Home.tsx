@@ -265,38 +265,40 @@ const Home: React.FC = () => {
          {/* Oversized Bold Headlines with Logo */}
 <div className="space-y-3">
   <div className={`transition-all duration-1000 delay-300 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}>
-    <div className="flex items-center space-x-8">
-      {/* Logo - On the Left Side */}
-      <div className="hidden lg:block flex-shrink-0">
+    <div className="flex items-center space-x-4 sm:space-x-6 lg:space-x-8">
+      {/* Logo - Visible on All Devices */}
+      <div className="block flex-shrink-0" style={{ background: 'rgba(255,0,0,0.1)' }}>
         <div className="relative group">
           {/* Logo Container with Glow Effect */}
-          <div className="relative p-4 rounded-2xl bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm border border-white/20 hover:border-white/40 transition-all duration-500 group-hover:scale-110">
+          <div className="relative p-2 sm:p-3 lg:p-4 rounded-xl lg:rounded-2xl bg-gradient-to-br from-white/20 to-white/10 backdrop-blur-sm border-2 border-white/40 hover:border-white/60 transition-all duration-500 group-hover:scale-110">
             <img 
               src="/BBP.jpg" 
               alt="Big Boss Pizza Logo" 
-              className="h-20 w-20 sm:h-24 sm:w-24 lg:h-28 lg:w-28 xl:h-32 xl:w-32 object-contain drop-shadow-2xl filter contrast-125 saturate-110 group-hover:scale-105 transition-transform duration-300"
+              className="block h-12 w-12 sm:h-16 sm:w-16 md:h-20 md:w-20 lg:h-28 lg:w-28 xl:h-32 xl:w-32 object-contain drop-shadow-2xl filter contrast-125 saturate-110 group-hover:scale-105 transition-transform duration-300"
             />
             
             {/* Animated Glow Ring */}
-            <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-red-500/30 to-orange-500/30 opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-pulse"></div>
+            <div className="absolute inset-0 rounded-xl lg:rounded-2xl bg-gradient-to-r from-red-500/30 to-orange-500/30 opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-pulse"></div>
             
             {/* Sparkle Effects */}
-            <div className="absolute -top-2 -right-2 w-4 h-4 bg-yellow-400 rounded-full opacity-75 animate-ping"></div>
-            <div className="absolute -bottom-2 -left-2 w-3 h-3 bg-red-500 rounded-full opacity-60 animate-ping" style={{ animationDelay: '0.5s' }}></div>
+            <div className="absolute -top-1 -right-1 lg:-top-2 lg:-right-2 w-2 h-2 lg:w-4 lg:h-4 bg-yellow-400 rounded-full opacity-75 animate-ping"></div>
+            <div className="absolute -bottom-1 -left-1 lg:-bottom-2 lg:-left-2 w-1.5 h-1.5 lg:w-3 lg:h-3 bg-red-500 rounded-full opacity-60 animate-ping" style={{ animationDelay: '0.5s' }}></div>
           </div>
           
-          {/* Floating Badge */}
-          <div className="absolute -bottom-3 -right-3 bg-gradient-to-r from-yellow-500 to-orange-500 text-black px-3 py-1.5 rounded-full shadow-lg">
+          {/* Floating Badge - Hidden on Mobile for Cleaner Look */}
+          <div className="hidden sm:block absolute -bottom-2 -right-2 lg:-bottom-3 lg:-right-3 bg-gradient-to-r from-yellow-500 to-orange-500 text-black px-2 py-1 lg:px-3 lg:py-1.5 rounded-full shadow-lg">
             <span className="text-xs font-bold flex items-center space-x-1">
-             
+              <span>👑</span>
+              <span className="hidden md:inline">EST. 1985</span>
+              <span className="md:hidden">1985</span>
             </span>
           </div>
         </div>
       </div>
       
       {/* Text Content */}
-      <div className="flex-1">
-        <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-black leading-none">
+      <div className="flex-1 min-w-0">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black leading-none">
           <span className="block bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500 bg-clip-text text-transparent animate-pulse">
             BIG
           </span>
