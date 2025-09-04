@@ -30,8 +30,8 @@ const Footer: React.FC = () => {
             <div>
               <h3 className="text-lg font-semibold mb-3 sm:mb-4">Contact Info</h3>
               <div className="space-y-2">
-                <p className="text-gray-300">📞 Phone: +92 301 3926202</p>
-                <p className="text-gray-300">✉️ Email: info@bigbosspizza.com</p>
+                <p className="text-gray-300">📞 Phone: <a href="tel:+92 (21) 37187878" className="hover:text-white transition-colors">+92 (21) 37187878</a></p> 
+                <p className="text-gray-300">✉️ Email: <a href="mailto:info@bigbosspizza.com" className="hover:text-white transition-colors">info@bigbosspizza.com</a></p>
                 <p className="text-gray-300">📍 Location: Safa Heights, Precinct 11A, Bahria Town, Karachi</p>
               </div>
             </div>
