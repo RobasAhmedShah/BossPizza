@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Search, Plus, Star, ShoppingCart, X, ArrowRight, Filter, Grid, List } from 'lucide-react';
+import { Search, Plus, ShoppingCart, X, ArrowRight, Filter, Grid, List } from 'lucide-react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useCart } from '../contexts/CartContext';
 import { useToast } from '../hooks/useToast';
@@ -315,11 +315,11 @@ const Menu: React.FC = () => {
         const minPrice = Math.min(...item.sizes.map(s => s.price));
         switch (priceFilter) {
           case 'under15':
-            return minPrice < 15;
+            return minPrice < 200;
           case '15to25':
-            return minPrice >= 15 && minPrice <= 25;
+            return minPrice >= 200 && minPrice <= 500;
           case 'over25':
-            return minPrice > 25;
+            return minPrice > 500;
           default:
             return true;
         }
@@ -511,9 +511,9 @@ const Menu: React.FC = () => {
                      <span className="text-xs font-medium text-gray-700 mr-2">Price:</span>
                      {[
                        { value: 'all', label: 'All' },
-                       { value: 'under15', label: '<$15' },
-                       { value: '15to25', label: '$15-25' },
-                       { value: 'over25', label: '>$25' }
+                       { value: 'under15', label: '<PKR 200' },
+                       { value: '15to25', label: 'PKR 200-500' },
+                       { value: 'over25', label: '>PKR 500' }
                      ].map((option) => (
                        <button
                          key={option.value}
@@ -1111,8 +1111,8 @@ const Menu: React.FC = () => {
                                       <li key={key} className="flex items-center space-x-2">
                                         <div className="w-1.5 h-1.5 bg-primary-600 rounded-full"></div>
                                         <span>
-                                          {typeof value === 'object' && value.count && value.size
-                                            ? `${value.count} ${key} (${value.size})`
+                                          {typeof value === 'object' && value.count
+                                            ? `${value.count} ${value.type || key}${value.size ? ` (${value.size})` : ''}`
                                             : `${value} ${key}`
                                           }
                                         </span>
