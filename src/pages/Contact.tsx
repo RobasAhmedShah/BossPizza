@@ -99,7 +99,7 @@ const Contact: React.FC = () => {
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold text-gray-900 mb-1">Hours</h3>
-                  <p className="text-gray-600">Mon–Sun: 5 PM–12 AM</p>
+                  <p className="text-gray-600">Mon–Sun: 5 PM–03 AM</p>
                   <p className="text-sm text-gray-500 mt-1">Open every day of the week</p>
                 </div>
               </div>
