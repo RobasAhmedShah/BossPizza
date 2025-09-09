@@ -315,14 +315,7 @@ const Home: React.FC = () => {
             <div className="absolute -bottom-1 -left-1 lg:-bottom-2 lg:-left-2 w-1.5 h-1.5 lg:w-3 lg:h-3 bg-red-500 rounded-full opacity-60 animate-ping" style={{ animationDelay: '0.5s' }}></div>
           </div>
           
-          {/* Floating Badge - Hidden on Mobile for Cleaner Look */}
-          <div className="hidden sm:block absolute -bottom-2 -right-2 lg:-bottom-3 lg:-right-3 bg-gradient-to-r from-yellow-500 to-orange-500 text-black px-2 py-1 lg:px-3 lg:py-1.5 rounded-full shadow-lg">
-            <span className="text-xs font-bold flex items-center space-x-1">
-              <span>👑</span>
-              <span className="hidden md:inline">Handcrafted. 1885</span>
-              <span className="md:hidden">1885</span>
-            </span>
-          </div>
+         
         </div>
       </div>
       
@@ -354,7 +347,7 @@ const Home: React.FC = () => {
   </div>
   <div className={`transition-all duration-1000 delay-700 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}>
     <p className="text-sm text-gray-400 max-w-md leading-relaxed">
-      Handcrafted since 1985 • Authentic Italian Experience • Game-changing flavors that'll make you the boss of your taste buds
+     • Authentic Italian Experience • Game-changing flavors that'll make you the boss of your taste buds
     </p>
   </div>
 </div>
@@ -1212,19 +1205,33 @@ const Home: React.FC = () => {
                 </h2>
                 
                 <div className="space-y-4 text-white/90 text-lg leading-relaxed">
+                 
                   <p>
-                    Since 1985, we've been the undisputed champions of pizza perfection. 
-                    What started as a small family dream has grown into a legendary empire.
+                    At Big Boss Pizza, we don't serve old tales — we serve the future of pizza, hot and fresh.
                   </p>
                   
                   <p>
-                    Every pizza is a masterpiece, crafted with premium ingredients and 
-                    traditional techniques passed down through generations. We don't just 
-                    make pizza – we create experiences.
+                    Our goal is clear:
                   </p>
                   
-                  <p className="font-bold text-yellow-300">
-                    "When you're the boss, you demand the best. That's exactly what we deliver."
+                  <p>
+                    👉 To become Pakistan's fastest-growing pizza franchise, opening 25 branches in the next 10 years.
+                  </p>
+                  
+                  <p>
+                    We're on a mission to serve pizzas made with freshly prepared dough, premium cheese, garden-fresh vegetables, and our signature organic sauces — delivering the perfect balance of flavor, freshness, and satisfaction.
+                  </p>
+                  
+                  <p>
+                    But Big Boss Pizza is more than food.
+                  </p>
+                  
+                  <p>
+                    It's an idea.
+                  </p>
+                  
+                  <p>
+                    A belief that everyone can "Be Your Own Big Boss."
                   </p>
                 </div>
 
@@ -1244,7 +1251,7 @@ const Home: React.FC = () => {
             {/* Right - Pizza Photography */}
             <ScrollReveal direction="right" className="relative overflow-hidden">
               <img
-                src="https://images.pexels.com/photos/4393021/pexels-photo-4393021.jpeg?auto=compress&cs=tinysrgb&w=800"
+                src="https://svgpmbhocwhcnqmyuhzv.supabase.co/storage/v1/object/public/menu/Fish%20and%20chips.png"
                 alt="About Big Boss Pizza"
                 className="w-full h-full object-cover"
                 loading="lazy"
