@@ -92,19 +92,19 @@ const CreateYourOwnPizza: React.FC<CreateYourOwnPizzaProps> = ({ onClose }) => {
       id: 'original',
       name: 'Original Crust',
       description: 'Our signature hand-tossed crust with perfect thickness and golden edges',
-      image: 'https://images.pexels.com/photos/4518843/pexels-photo-4518843.jpeg?auto=compress&cs=tinysrgb&w=300'
+      image: '/Original Curst.png'
     },
     {
       id: 'thin',
       name: 'Thin Crust',
       description: 'Crispy, light and perfectly crunchy - ideal for topping lovers',
-      image: 'https://images.pexels.com/photos/4518842/pexels-photo-4518842.jpeg?auto=compress&cs=tinysrgb&w=300'
+      image: '/Thin curst.png'
     },
     {
       id: 'pan',
       name: 'Pan Crust',
       description: 'Thick, fluffy and golden - comfort food at its finest',
-      image: 'https://images.pexels.com/photos/4518844/pexels-photo-4518844.jpeg?auto=compress&cs=tinysrgb&w=300'
+      image: '/Pan Curst.png'
     },
   ];
 
@@ -149,21 +149,21 @@ const CreateYourOwnPizza: React.FC<CreateYourOwnPizzaProps> = ({ onClose }) => {
       name: 'Fiery Sauce',
       description: 'Bold and spicy tomato base with red chilies',
       spiceLevel: 3,
-      image: 'https://images.pexels.com/photos/4198015/pexels-photo-4198015.jpeg?auto=compress&cs=tinysrgb&w=200'
+      image: '/Fiery Sauce.png'
     },
     {
       id: 'garlic',
       name: 'Creamy Garlic',
       description: 'Rich white sauce with roasted garlic and herbs',
       spiceLevel: 0,
-      image: 'https://images.pexels.com/photos/4198016/pexels-photo-4198016.jpeg?auto=compress&cs=tinysrgb&w=200'
+      image: '/Creamy Garlic sauce.png'
     },
     {
       id: 'peri',
       name: 'Peri Peri Sauce',
       description: 'African bird\'s eye chili sauce with citrus notes',
       spiceLevel: 4,
-      image: 'https://images.pexels.com/photos/4198017/pexels-photo-4198017.jpeg?auto=compress&cs=tinysrgb&w=200'
+      image: '/Peri Peri.png'
     },
   ];
 
@@ -174,7 +174,7 @@ const CreateYourOwnPizza: React.FC<CreateYourOwnPizzaProps> = ({ onClose }) => {
       description: 'Tender grilled chicken pieces',
       category: 'meat',
       price: 150,
-      image: 'https://images.pexels.com/photos/434258/pexels-photo-434258.jpeg?auto=compress&cs=tinysrgb&w=150'
+      image: '/Chicken Pieces.png'
     },
     {
       id: 'pepperoni',
@@ -182,7 +182,7 @@ const CreateYourOwnPizza: React.FC<CreateYourOwnPizzaProps> = ({ onClose }) => {
       description: 'Classic spicy pepperoni slices',
       category: 'meat',
       price: 180,
-      image: 'https://images.pexels.com/photos/4393021/pexels-photo-4393021.jpeg?auto=compress&cs=tinysrgb&w=150'
+      image: '/peperoni.png'
     },
     {
       id: 'mushrooms',
@@ -190,7 +190,7 @@ const CreateYourOwnPizza: React.FC<CreateYourOwnPizzaProps> = ({ onClose }) => {
       description: 'Fresh button mushrooms',
       category: 'vegetable',
       price: 80,
-      image: 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=150'
+      image: '/Mushroom.png'
     },
     {
       id: 'capsicum',
@@ -198,7 +198,7 @@ const CreateYourOwnPizza: React.FC<CreateYourOwnPizzaProps> = ({ onClose }) => {
       description: 'Colorful bell peppers',
       category: 'vegetable',
       price: 70,
-      image: 'https://images.pexels.com/photos/1352199/pexels-photo-1352199.jpeg?auto=compress&cs=tinysrgb&w=150'
+      image: '/capsicum.png'
     },
     {
       id: 'onion',
@@ -206,7 +206,7 @@ const CreateYourOwnPizza: React.FC<CreateYourOwnPizzaProps> = ({ onClose }) => {
       description: 'Sweet red onions',
       category: 'vegetable',
       price: 50,
-      image: 'https://images.pexels.com/photos/1329296/pexels-photo-1329296.jpeg?auto=compress&cs=tinysrgb&w=150'
+      image: '/Onion.png'
     },
     {
       id: 'jalapenos',
@@ -214,7 +214,7 @@ const CreateYourOwnPizza: React.FC<CreateYourOwnPizzaProps> = ({ onClose }) => {
       description: 'Spicy jalapeño peppers',
       category: 'vegetable',
       price: 90,
-      image: 'https://images.pexels.com/photos/4518843/pexels-photo-4518843.jpeg?auto=compress&cs=tinysrgb&w=150'
+      image: '/Jalapeno.png'
     },
     {
       id: 'olives',
@@ -222,7 +222,7 @@ const CreateYourOwnPizza: React.FC<CreateYourOwnPizzaProps> = ({ onClose }) => {
       description: 'Mediterranean black olives',
       category: 'vegetable',
       price: 100,
-      image: 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=150'
+      image: '/Olive.png'
     },
     {
       id: 'cheese',
@@ -230,7 +230,7 @@ const CreateYourOwnPizza: React.FC<CreateYourOwnPizzaProps> = ({ onClose }) => {
       description: 'Extra mozzarella and cheddar',
       category: 'cheese',
       price: 120,
-      image: 'https://images.pexels.com/photos/4518843/pexels-photo-4518843.jpeg?auto=compress&cs=tinysrgb&w=150'
+      image: '/cheese blend.png'
     },
   ];
 

@@ -122,6 +122,7 @@ const Cart: React.FC = () => {
                             <div className="text-xs lg:text-sm text-gray-600 mt-1 space-y-0.5">
                               {item.options.size && <p>Size: <span className="font-medium">{item.options.size}</span></p>}
                               {item.options.crust && <p>Crust: <span className="font-medium">{item.options.crust}</span></p>}
+                              {item.options.sauce && <p>Sauce: <span className="font-medium">{item.options.sauce}</span></p>}
                               {item.options.veggies?.length > 0 && (
                                 <p>Veggies: <span className="font-medium">{item.options.veggies.join(', ')}</span></p>
                               )}

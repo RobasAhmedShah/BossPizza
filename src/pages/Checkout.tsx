@@ -570,7 +570,8 @@ const Checkout: React.FC = () => {
                         {item.options && (
                           <p className="text-xs text-gray-500">
                             {item.options.size && `${item.options.size} | `}
-                            {item.options.crust}
+                            {item.options.crust && `${item.options.crust}`}
+                            {item.options.sauce && ` | ${item.options.sauce}`}
                           </p>
                         )}
                       </div>

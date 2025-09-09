@@ -1196,6 +1196,7 @@ const Menu: React.FC = () => {
                           {item.options && (
                             <div className="text-xs text-gray-500 mt-1">
                               {item.options.size && `Size: ${item.options.size}`}
+                              {item.options.sauce && ` • Sauce: ${item.options.sauce}`}
                             </div>
                           )}
                           <p className="text-primary-600 font-bold text-sm">PKR{item.price.toFixed(2)}</p>
