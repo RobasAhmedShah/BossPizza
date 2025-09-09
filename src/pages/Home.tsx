@@ -1235,16 +1235,7 @@ const Home: React.FC = () => {
                   </p>
                 </div>
 
-                <div className="grid grid-cols-2 gap-6 pt-6">
-                  <div className="text-center">
-                    <div className="text-3xl font-black text-yellow-300">40+</div>
-                    <div className="text-white/80 text-sm">Years of Excellence</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-3xl font-black text-yellow-300">1M+</div>
-                    <div className="text-white/80 text-sm">Pizzas Served</div>
-                  </div>
-                </div>
+               
               </div>
             </ScrollReveal>
 
