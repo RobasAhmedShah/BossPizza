@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { ArrowLeft, ArrowRight, Check, X, Plus, Minus, ShoppingCart, Eye } from 'lucide-react';
+import React, { useState } from 'react';
+import { ArrowLeft, ArrowRight, Check, X, ShoppingCart, Eye } from 'lucide-react';
 import { useCart } from '../contexts/CartContext';
 import { useToast } from '../hooks/useToast';
 
@@ -323,26 +323,26 @@ const CreateYourOwnPizza: React.FC<CreateYourOwnPizzaProps> = ({ onClose }) => {
   };
 
   const renderStepIndicator = () => (
-    <div className="flex items-center justify-center mb-8 bg-gray-50 rounded-2xl p-4">
+    <div className="flex items-center justify-center mb-4 sm:mb-8 bg-gray-50 rounded-xl sm:rounded-2xl p-3 sm:p-4">
       {steps.map((step, index) => (
         <div key={step.key} className="flex items-center">
           <div className={`
-            flex items-center justify-center w-12 h-12 rounded-full text-sm font-bold transition-all duration-300
+            flex items-center justify-center w-8 h-8 sm:w-12 sm:h-12 rounded-full text-xs sm:text-sm font-bold transition-all duration-300
             ${index <= currentStep 
               ? 'bg-primary-500 text-white shadow-lg' 
               : 'bg-gray-200 text-gray-500'
             }
           `}>
             {index < currentStep ? (
-              <Check className="h-6 w-6" />
+              <Check className="h-3 w-3 sm:h-6 sm:w-6" />
             ) : (
-              <span className="text-lg">{step.icon}</span>
+              <span className="text-sm sm:text-lg">{step.icon}</span>
             )}
           </div>
           
           {index < steps.length - 1 && (
             <div className={`
-              w-16 h-1 mx-2 rounded-full transition-all duration-300
+              w-8 sm:w-16 h-1 mx-1 sm:mx-2 rounded-full transition-all duration-300
               ${index < currentStep ? 'bg-primary-500' : 'bg-gray-200'}
             `} />
           )}
@@ -352,13 +352,13 @@ const CreateYourOwnPizza: React.FC<CreateYourOwnPizzaProps> = ({ onClose }) => {
   );
 
   const renderCrustStep = () => (
-    <div className="space-y-6">
-      <div className="text-center mb-8">
-        <h3 className="text-2xl font-bold text-gray-900 mb-2">Choose Your Crust</h3>
-        <p className="text-gray-600">The foundation of your perfect pizza</p>
+    <div className="space-y-4 sm:space-y-6">
+      <div className="text-center mb-4 sm:mb-8">
+        <h3 className="text-lg sm:text-2xl font-bold text-gray-900 mb-2">Choose Your Crust</h3>
+        <p className="text-sm sm:text-base text-gray-600">The foundation of your perfect pizza</p>
       </div>
       
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6">
         {crustOptions.map((crust) => (
           <div
             key={crust.id}
@@ -375,7 +375,7 @@ const CreateYourOwnPizza: React.FC<CreateYourOwnPizzaProps> = ({ onClose }) => {
               <img
                 src={crust.image}
                 alt={crust.name}
-                className="w-full h-48 object-cover"
+                className="w-full h-32 sm:h-48 object-cover"
               />
               {selections.crust === crust.id && (
                 <div className="absolute top-4 right-4 bg-primary-500 text-white rounded-full p-2">
@@ -383,9 +383,9 @@ const CreateYourOwnPizza: React.FC<CreateYourOwnPizzaProps> = ({ onClose }) => {
                 </div>
               )}
             </div>
-            <div className="p-6 bg-white">
-              <h4 className="text-lg font-bold text-gray-900 mb-2">{crust.name}</h4>
-              <p className="text-gray-600 text-sm leading-relaxed">{crust.description}</p>
+            <div className="p-3 sm:p-6 bg-white">
+              <h4 className="text-base sm:text-lg font-bold text-gray-900 mb-2">{crust.name}</h4>
+              <p className="text-gray-600 text-xs sm:text-sm leading-relaxed">{crust.description}</p>
             </div>
           </div>
         ))}
@@ -394,13 +394,13 @@ const CreateYourOwnPizza: React.FC<CreateYourOwnPizzaProps> = ({ onClose }) => {
   );
 
   const renderSizeStep = () => (
-    <div className="space-y-6">
-      <div className="text-center mb-8">
-        <h3 className="text-2xl font-bold text-gray-900 mb-2">Pick Your Size</h3>
-        <p className="text-gray-600">How hungry are you today?</p>
+    <div className="space-y-4 sm:space-y-6">
+      <div className="text-center mb-4 sm:mb-8">
+        <h3 className="text-lg sm:text-2xl font-bold text-gray-900 mb-2">Pick Your Size</h3>
+        <p className="text-sm sm:text-base text-gray-600">How hungry are you today?</p>
       </div>
       
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4 lg:gap-6">
         {sizeOptions.map((size) => (
           <div
             key={size.id}
@@ -413,16 +413,16 @@ const CreateYourOwnPizza: React.FC<CreateYourOwnPizzaProps> = ({ onClose }) => {
               }
             `}
           >
-            <div className="relative bg-gradient-to-br from-primary-50 to-orange-50 p-6">
+            <div className="relative bg-gradient-to-br from-primary-50 to-orange-50 p-3 sm:p-6">
               <div className="text-center">
-                <div className="relative mx-auto mb-4" style={{ width: `${parseInt(size.id) * 4}px`, height: `${parseInt(size.id) * 4}px` }}>
-                  <div className="w-full h-full bg-gradient-to-br from-yellow-200 to-orange-300 rounded-full border-4 border-orange-400 shadow-lg"></div>
-                  <div className="absolute inset-2 bg-gradient-to-br from-red-400 to-red-600 rounded-full"></div>
+                <div className="relative mx-auto mb-2 sm:mb-4" style={{ width: `${Math.max(parseInt(size.id) * 3, 40)}px`, height: `${Math.max(parseInt(size.id) * 3, 40)}px` }}>
+                  <div className="w-full h-full bg-gradient-to-br from-yellow-200 to-orange-300 rounded-full border-2 sm:border-4 border-orange-400 shadow-lg"></div>
+                  <div className="absolute inset-1 sm:inset-2 bg-gradient-to-br from-red-400 to-red-600 rounded-full"></div>
                 </div>
-                <h4 className="text-lg font-bold text-gray-900">{size.name}</h4>
-                <p className="text-sm text-gray-600 mb-1">{size.diameter}</p>
-                <p className="text-xs text-gray-500 mb-3">{size.servings}</p>
-                <div className="text-xl font-black text-primary-600">
+                <h4 className="text-sm sm:text-lg font-bold text-gray-900">{size.name}</h4>
+                <p className="text-xs sm:text-sm text-gray-600 mb-1">{size.diameter}</p>
+                <p className="text-xs text-gray-500 mb-2 sm:mb-3">{size.servings}</p>
+                <div className="text-sm sm:text-xl font-black text-primary-600">
                   PKR {selections.crust ? size.price[selections.crust]?.toLocaleString() : 'N/A'}
                 </div>
               </div>
@@ -439,13 +439,13 @@ const CreateYourOwnPizza: React.FC<CreateYourOwnPizzaProps> = ({ onClose }) => {
   );
 
   const renderSauceStep = () => (
-    <div className="space-y-6">
-      <div className="text-center mb-8">
-        <h3 className="text-2xl font-bold text-gray-900 mb-2">Select Your Sauce</h3>
-        <p className="text-gray-600">Choose your flavor adventure</p>
+    <div className="space-y-4 sm:space-y-6">
+      <div className="text-center mb-4 sm:mb-8">
+        <h3 className="text-lg sm:text-2xl font-bold text-gray-900 mb-2">Select Your Sauce</h3>
+        <p className="text-sm sm:text-base text-gray-600">Choose your flavor adventure</p>
       </div>
       
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6">
         {sauceOptions.map((sauce) => (
           <div
             key={sauce.id}
@@ -462,7 +462,7 @@ const CreateYourOwnPizza: React.FC<CreateYourOwnPizzaProps> = ({ onClose }) => {
               <img
                 src={sauce.image}
                 alt={sauce.name}
-                className="w-full h-48 object-cover"
+                className="w-full h-32 sm:h-48 object-cover"
               />
               {selections.sauce === sauce.id && (
                 <div className="absolute top-4 right-4 bg-primary-500 text-white rounded-full p-2">
@@ -470,12 +470,12 @@ const CreateYourOwnPizza: React.FC<CreateYourOwnPizzaProps> = ({ onClose }) => {
                 </div>
               )}
             </div>
-            <div className="p-6 bg-white">
+            <div className="p-3 sm:p-6 bg-white">
               <div className="flex items-center justify-between mb-2">
-                <h4 className="text-lg font-bold text-gray-900">{sauce.name}</h4>
+                <h4 className="text-base sm:text-lg font-bold text-gray-900">{sauce.name}</h4>
                 <div className="text-xs">{getSpiceIndicator(sauce.spiceLevel)}</div>
               </div>
-              <p className="text-gray-600 text-sm leading-relaxed">{sauce.description}</p>
+              <p className="text-gray-600 text-xs sm:text-sm leading-relaxed">{sauce.description}</p>
             </div>
           </div>
         ))}
@@ -494,7 +494,7 @@ const CreateYourOwnPizza: React.FC<CreateYourOwnPizzaProps> = ({ onClose }) => {
           <span className="text-2xl mr-2">{icon}</span>
           {title}
         </h4>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 sm:gap-3 md:gap-4">
           {toppings.map((topping) => (
             <div
               key={topping.id}
@@ -511,7 +511,7 @@ const CreateYourOwnPizza: React.FC<CreateYourOwnPizzaProps> = ({ onClose }) => {
                 <img
                   src={topping.image}
                   alt={topping.name}
-                  className="w-full h-24 object-cover"
+                  className="w-full h-16 sm:h-20 md:h-24 object-cover"
                 />
                 {selections.toppings.includes(topping.id) && (
                   <div className="absolute top-2 right-2 bg-primary-500 text-white rounded-full p-1">
@@ -519,10 +519,10 @@ const CreateYourOwnPizza: React.FC<CreateYourOwnPizzaProps> = ({ onClose }) => {
                   </div>
                 )}
               </div>
-              <div className="p-3">
-                <h5 className="font-semibold text-gray-900 text-sm mb-1">{topping.name}</h5>
-                <p className="text-xs text-gray-600 mb-2 line-clamp-2">{topping.description}</p>
-                <p className="text-sm font-bold text-primary-600">+PKR {topping.price}</p>
+              <div className="p-2 sm:p-3">
+                <h5 className="font-semibold text-gray-900 text-xs sm:text-sm mb-1">{topping.name}</h5>
+                <p className="text-xs text-gray-600 mb-1 sm:mb-2 line-clamp-2 hidden sm:block">{topping.description}</p>
+                <p className="text-xs sm:text-sm font-bold text-primary-600">+PKR {topping.price}</p>
               </div>
             </div>
           ))}
@@ -531,10 +531,10 @@ const CreateYourOwnPizza: React.FC<CreateYourOwnPizzaProps> = ({ onClose }) => {
     );
 
     return (
-      <div className="space-y-6">
-        <div className="text-center mb-8">
-          <h3 className="text-2xl font-bold text-gray-900 mb-2">Add Your Toppings</h3>
-          <p className="text-gray-600">Make it uniquely yours! (Optional)</p>
+      <div className="space-y-4 sm:space-y-6">
+        <div className="text-center mb-4 sm:mb-8">
+          <h3 className="text-lg sm:text-2xl font-bold text-gray-900 mb-2">Add Your Toppings</h3>
+          <p className="text-sm sm:text-base text-gray-600">Make it uniquely yours! (Optional)</p>
           {selections.toppings.length > 0 && (
             <p className="text-sm text-primary-600 mt-2">
               {selections.toppings.length} topping{selections.toppings.length > 1 ? 's' : ''} selected
@@ -556,8 +556,8 @@ const CreateYourOwnPizza: React.FC<CreateYourOwnPizzaProps> = ({ onClose }) => {
     const selectedToppings = toppingOptions.filter(t => selections.toppings.includes(t.id));
 
     return (
-      <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-[70] p-2 sm:p-4">
-        <div className="bg-white rounded-xl sm:rounded-2xl max-w-2xl w-full max-h-[98vh] sm:max-h-[90vh] overflow-y-auto">
+      <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-[70] p-1 sm:p-4">
+        <div className="bg-white rounded-lg sm:rounded-xl lg:rounded-2xl max-w-2xl w-full h-[100vh] sm:h-auto sm:max-h-[90vh] overflow-y-auto">
           <div className="p-4 sm:p-6">
             <div className="flex items-center justify-between mb-4 sm:mb-6">
               <h3 className="text-xl sm:text-2xl font-bold text-gray-900">Your Custom Pizza</h3>
@@ -571,38 +571,38 @@ const CreateYourOwnPizza: React.FC<CreateYourOwnPizzaProps> = ({ onClose }) => {
 
             {/* Pizza Visual */}
             <div className="text-center mb-4 sm:mb-6">
-              <div className="relative mx-auto w-48 h-48 sm:w-64 sm:h-64 mb-4">
-                <div className="w-full h-full bg-gradient-to-br from-yellow-200 to-orange-300 rounded-full border-4 sm:border-8 border-orange-400 shadow-xl">
-                  <div className="absolute inset-2 sm:inset-4 bg-gradient-to-br from-red-400 to-red-600 rounded-full flex items-center justify-center">
-                    <div className="text-white text-2xl sm:text-4xl">🍕</div>
+              <div className="relative mx-auto w-32 h-32 sm:w-48 sm:h-48 lg:w-64 lg:h-64 mb-4">
+                <div className="w-full h-full bg-gradient-to-br from-yellow-200 to-orange-300 rounded-full border-2 sm:border-4 lg:border-8 border-orange-400 shadow-xl">
+                  <div className="absolute inset-1 sm:inset-2 lg:inset-4 bg-gradient-to-br from-red-400 to-red-600 rounded-full flex items-center justify-center">
+                    <div className="text-white text-xl sm:text-2xl lg:text-4xl">🍕</div>
                   </div>
                 </div>
               </div>
-              <h4 className="text-lg sm:text-xl font-bold text-gray-900 mb-2">
+              <h4 className="text-base sm:text-lg lg:text-xl font-bold text-gray-900 mb-2">
                 Custom {selectedSize?.name} {selectedCrust?.name} Pizza
               </h4>
             </div>
 
             {/* Order Summary */}
-            <div className="space-y-4 mb-6">
-              <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
-                <span className="font-medium text-gray-700">Crust:</span>
-                <span className="text-gray-900">{selectedCrust?.name}</span>
+            <div className="space-y-2 sm:space-y-4 mb-4 sm:mb-6">
+              <div className="flex justify-between items-center p-2 sm:p-3 bg-gray-50 rounded-lg">
+                <span className="font-medium text-gray-700 text-sm sm:text-base">Crust:</span>
+                <span className="text-gray-900 text-sm sm:text-base">{selectedCrust?.name}</span>
               </div>
-              <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
-                <span className="font-medium text-gray-700">Size:</span>
-                <span className="text-gray-900">{selectedSize?.name} ({selectedSize?.diameter})</span>
+              <div className="flex justify-between items-center p-2 sm:p-3 bg-gray-50 rounded-lg">
+                <span className="font-medium text-gray-700 text-sm sm:text-base">Size:</span>
+                <span className="text-gray-900 text-sm sm:text-base">{selectedSize?.name} ({selectedSize?.diameter})</span>
               </div>
-              <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
-                <span className="font-medium text-gray-700">Sauce:</span>
-                <span className="text-gray-900">{selectedSauce?.name}</span>
+              <div className="flex justify-between items-center p-2 sm:p-3 bg-gray-50 rounded-lg">
+                <span className="font-medium text-gray-700 text-sm sm:text-base">Sauce:</span>
+                <span className="text-gray-900 text-sm sm:text-base">{selectedSauce?.name}</span>
               </div>
               {selectedToppings.length > 0 && (
-                <div className="p-3 bg-gray-50 rounded-lg">
-                  <span className="font-medium text-gray-700 block mb-2">Toppings:</span>
-                  <div className="flex flex-wrap gap-2">
+                <div className="p-2 sm:p-3 bg-gray-50 rounded-lg">
+                  <span className="font-medium text-gray-700 block mb-2 text-sm sm:text-base">Toppings:</span>
+                  <div className="flex flex-wrap gap-1 sm:gap-2">
                     {selectedToppings.map(topping => (
-                      <span key={topping.id} className="px-2 py-1 bg-primary-100 text-primary-700 rounded-full text-sm">
+                      <span key={topping.id} className="px-2 py-1 bg-primary-100 text-primary-700 rounded-full text-xs sm:text-sm">
                         {topping.name} (+PKR {topping.price})
                       </span>
                     ))}
@@ -612,8 +612,8 @@ const CreateYourOwnPizza: React.FC<CreateYourOwnPizzaProps> = ({ onClose }) => {
             </div>
 
             {/* Total Price */}
-            <div className="border-t pt-4 mb-6">
-              <div className="flex justify-between items-center text-xl font-bold">
+            <div className="border-t pt-3 sm:pt-4 mb-4 sm:mb-6">
+              <div className="flex justify-between items-center text-lg sm:text-xl font-bold">
                 <span>Total:</span>
                 <span className="text-primary-600">PKR {calculatePrice().toLocaleString()}</span>
               </div>
@@ -652,8 +652,8 @@ const CreateYourOwnPizza: React.FC<CreateYourOwnPizzaProps> = ({ onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-[60] p-2 sm:p-4">
-      <div className="bg-white rounded-xl sm:rounded-2xl w-full max-w-6xl max-h-[98vh] sm:max-h-[95vh] overflow-hidden flex flex-col">
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-[60] p-1 sm:p-4">
+      <div className="bg-white rounded-lg sm:rounded-xl lg:rounded-2xl w-full max-w-6xl h-[100vh] sm:h-auto sm:max-h-[95vh] overflow-hidden flex flex-col">
         {/* Header */}
         <div className="p-4 sm:p-6 border-b border-gray-200 bg-gradient-to-r from-primary-50 to-orange-50">
           <div className="flex items-center justify-between mb-4">
@@ -698,10 +698,10 @@ const CreateYourOwnPizza: React.FC<CreateYourOwnPizzaProps> = ({ onClose }) => {
           <div className="flex flex-col space-y-4 sm:space-y-0 sm:flex-row sm:items-center sm:justify-between">
             {/* Mobile: Price first */}
             <div className="text-center sm:order-2">
-              <div className="text-xl sm:text-2xl font-black text-primary-600">
+              <div className="text-lg sm:text-xl lg:text-2xl font-black text-primary-600">
                 PKR {calculatePrice().toLocaleString()}
               </div>
-              <div className="text-sm text-gray-600">Total Price</div>
+              <div className="text-xs sm:text-sm text-gray-600">Total Price</div>
             </div>
 
             {/* Navigation Buttons */}

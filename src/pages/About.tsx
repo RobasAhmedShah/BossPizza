@@ -22,7 +22,7 @@ const About: React.FC = () => {
           <div className="lg:sticky lg:top-24">
             <div className="relative">
               <img
-                src="https://images.pexels.com/photos/4393021/pexels-photo-4393021.jpeg?auto=compress&cs=tinysrgb&w=800"
+                src="https://svgpmbhocwhcnqmyuhzv.supabase.co/storage/v1/object/public/menu/Fish%20and%20chips.png"
                 alt="Big Boss Pizza Story"
                 className="w-full h-[600px] object-cover rounded-2xl shadow-2xl"
               />

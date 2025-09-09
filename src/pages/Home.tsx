@@ -103,6 +103,36 @@ const Home: React.FC = () => {
 
   useEffect(() => {
     setIsLoaded(true);
+    
+    // Load Tawk.to script only on Home page
+    const loadTawkTo = () => {
+      // Check if Tawk.to is already loaded
+      if (window.Tawk_API) {
+        return;
+      }
+      
+      // Initialize Tawk.to
+      window.Tawk_API = window.Tawk_API || {};
+      window.Tawk_LoadStart = new Date();
+      
+      const script = document.createElement('script');
+      script.async = true;
+      script.src = 'https://embed.tawk.to/68ba15f43707681926b69e50/1j4bebhc0';
+      script.charset = 'UTF-8';
+      script.setAttribute('crossorigin', '*');
+      
+      const firstScript = document.getElementsByTagName('script')[0];
+      firstScript.parentNode?.insertBefore(script, firstScript);
+    };
+    
+    loadTawkTo();
+    
+    // Cleanup function to hide Tawk.to when leaving home page
+    return () => {
+      if (window.Tawk_API?.hideWidget) {
+        window.Tawk_API.hideWidget();
+      }
+    };
   }, []);
 
   useEffect(() => {
@@ -289,8 +319,8 @@ const Home: React.FC = () => {
           <div className="hidden sm:block absolute -bottom-2 -right-2 lg:-bottom-3 lg:-right-3 bg-gradient-to-r from-yellow-500 to-orange-500 text-black px-2 py-1 lg:px-3 lg:py-1.5 rounded-full shadow-lg">
             <span className="text-xs font-bold flex items-center space-x-1">
               <span>👑</span>
-              <span className="hidden md:inline">EST. 1985</span>
-              <span className="md:hidden">1985</span>
+              <span className="hidden md:inline">Handcrafted. 1885</span>
+              <span className="md:hidden">1885</span>
             </span>
           </div>
         </div>
@@ -896,35 +926,67 @@ const Home: React.FC = () => {
             <ScrollReveal direction="right" className="flex justify-center">
               <div className="relative">
                 <div className="w-64 h-[500px] bg-gradient-to-br from-gray-800 to-black rounded-[3rem] p-2 shadow-2xl">
-                  <div className="w-full h-full bg-gradient-to-br from-red-600 to-orange-600 rounded-[2.5rem] overflow-hidden relative">
-                    <img
-                      src="https://images.pexels.com/photos/4393021/pexels-photo-4393021.jpeg?auto=compress&cs=tinysrgb&w=400"
-                      alt="App Preview"
-                      className="w-full h-full object-cover"
-                      loading="lazy"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-                    
-                    {/* App UI Elements */}
-                    <div className="absolute bottom-8 left-4 right-4 text-white">
-                      <h4 className="font-bold text-lg mb-2">Order in 30 seconds</h4>
-                      <div className="bg-white/20 backdrop-blur-sm rounded-xl p-3">
-                        <div className="flex items-center justify-between">
-                          <span className="text-sm">Boss Special Pizza</span>
-                          <span className="font-bold">$24.99</span>
+                  <div className="w-full h-full bg-gradient-to-br from-red-600 to-orange-600 rounded-[2.5rem] overflow-hidden relative flex items-center justify-center">
+                    {/* Coming Soon Design */}
+                    <div className="text-center text-white p-8">
+                      {/* App Icon */}
+                      <div className="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-6 mx-auto border-2 border-white/30">
+                        <img 
+                          src="/BBP.svg" 
+                          alt="Big Boss Pizza App Icon" 
+                          className="w-12 h-12 object-contain filter brightness-0 invert"
+                        />
+                      </div>
+                      
+                      {/* Coming Soon Text */}
+                      <h3 className="text-2xl font-black mb-3">BIG BOSS</h3>
+                      <h4 className="text-lg font-bold mb-6">PIZZA APP</h4>
+                      
+                      {/* Coming Soon Badge */}
+                      <div className="bg-yellow-400 text-black px-4 py-2 rounded-full font-bold text-sm mb-6 inline-block">
+                        COMING SOON
+                      </div>
+                      
+                      {/* Features List */}
+                      <div className="space-y-3 text-sm">
+                        <div className="flex items-center justify-center space-x-2">
+                          <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                          <span>Lightning Fast Ordering</span>
+                        </div>
+                        <div className="flex items-center justify-center space-x-2">
+                          <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
+                          <span>Real-time Tracking</span>
+                        </div>
+                        <div className="flex items-center justify-center space-x-2">
+                          <div className="w-2 h-2 bg-purple-400 rounded-full"></div>
+                          <span>Exclusive Deals</span>
+                        </div>
+                      </div>
+                      
+                      {/* Notification Bell */}
+                      <div className="mt-8">
+                        <div className="bg-white/20 backdrop-blur-sm rounded-xl p-3 border border-white/30">
+                          <div className="flex items-center space-x-3">
+                            <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+                              <span className="text-xs">🔔</span>
+                            </div>
+                            <div className="text-left">
+                              <div className="text-xs font-semibold">Get Notified</div>
+                              <div className="text-xs opacity-80">When app launches</div>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
+                    
+                    {/* Floating Elements */}
+                    <div className="absolute top-4 right-4 w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
+                    <div className="absolute top-8 left-6 w-2 h-2 bg-yellow-400 rounded-full animate-pulse" style={{ animationDelay: '0.5s' }}></div>
+                    <div className="absolute bottom-20 right-6 w-2 h-2 bg-blue-400 rounded-full animate-pulse" style={{ animationDelay: '1s' }}></div>
                   </div>
                 </div>
 
-                {/* Floating Notifications */}
-                <div className="absolute -top-4 -right-4 bg-green-500 text-white px-3 py-2 rounded-full text-sm font-bold animate-bounce">
-                  Order Ready!
-                </div>
-                <div className="absolute -bottom-4 -left-4 bg-blue-500 text-white px-3 py-2 rounded-full text-sm font-bold animate-bounce" style={{ animationDelay: '0.5s' }}>
-                  20% OFF
-                </div>
+               
               </div>
             </ScrollReveal>
           </div>
