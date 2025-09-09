@@ -19,7 +19,7 @@ const Branches: React.FC = () => {
       address: 'Precinct 10A, Bahria Town, Karachi, Pakistan',
       city: 'Karachi',
       phone: '+92 21 1234 5678',
-      hours: 'Mon-Sun: 11 AM - 11 PM',
+      hours: 'Mon-Sun: 5 PM - 12 AM',
       coordinates: { lat: 25.0582, lng: 67.3146 }, // 25°03'29.7"N 67°18'52.7"E
       image: 'https://images.pexels.com/photos/1581384/pexels-photo-1581384.jpeg?auto=compress&cs=tinysrgb&w=400',
       status: 'available'
