@@ -87,11 +87,11 @@ const About: React.FC = () => {
                   <div className="space-y-3">
                     <div className="flex items-center space-x-3">
                       <Phone className="h-5 w-5 text-primary-600" />
-                      <span className="text-gray-700 font-medium">+92 (21) 37187878</span>
+                      <span className="text-gray-700 font-medium">+92 21 1234 5678</span>
                     </div>
                     <div className="flex items-center space-x-3">
                       <Mail className="h-5 w-5 text-primary-600" />
-                      <span className="text-gray-700 font-medium">info@bigbosspizza.co</span>
+                      <span className="text-gray-700 font-medium">info@bigbosspizza.com</span>
                     </div>
                   </div>
                 </div>

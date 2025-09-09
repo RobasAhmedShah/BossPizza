@@ -30,9 +30,9 @@ const Footer: React.FC = () => {
             <div>
               <h3 className="text-lg font-semibold mb-3 sm:mb-4">Contact Info</h3>
               <div className="space-y-2">
-                <p className="text-gray-300">📞 Phone: <a href="tel:+92 (21) 37187878" className="hover:text-white transition-colors">+92 (21) 37187878</a></p> 
+                <p className="text-gray-300">📞 Phone: <a href="tel:+92211234567" className="hover:text-white transition-colors">+92 21 1234 5678</a></p> 
                 <p className="text-gray-300">✉️ Email: <a href="https://mail.google.com/mail/u/0/?view=cm&to=info@bigbosspizza.com" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">info@bigbosspizza.com</a></p>
-                <p className="text-gray-300">📍 Location: Safa Heights, Precinct 11A, Bahria Town, Karachi</p>
+                <p className="text-gray-300">📍 Location: Safa Heights, Precinct 11A Commercial, Bahria Town Karachi</p>
               </div>
             </div>
 
@@ -64,7 +64,7 @@ const Footer: React.FC = () => {
 
             <div>
               <h3 className="text-lg font-semibold mb-3 sm:mb-4">Hours</h3>
-              <p className="text-gray-300">Mon–Sun: 11 AM–11 PM</p>
+              <p className="text-gray-300">Mon–Sun: 5 PM–12 AM</p>
             </div>
           </div>
 

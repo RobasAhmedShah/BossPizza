@@ -9,6 +9,9 @@ const Branches: React.FC = () => {
 
   const cities = [
     'Karachi',
+    'Hyderabad',
+    'Lahore',
+    'Islamabad',
     'Quetta'
   ];
 
@@ -16,7 +19,7 @@ const Branches: React.FC = () => {
     {
       id: 1,
       name: 'Big Boss Pizza - Bahria Town',
-      address: 'Precinct 10A, Bahria Town, Karachi, Pakistan',
+      address: 'Safa Heights, Precinct 11A Commercial, Bahria Town Karachi',
       city: 'Karachi',
       phone: '+92 21 1234 5678',
       hours: 'Mon-Sun: 5 PM - 12 AM',
@@ -34,6 +37,51 @@ const Branches: React.FC = () => {
       coordinates: { lat: 30.1798, lng: 66.9750 },
       image: 'https://images.pexels.com/photos/1581384/pexels-photo-1581384.jpeg?auto=compress&cs=tinysrgb&w=400',
       status: 'coming-soon'
+    },
+    // Coming Soon Branches
+    {
+      id: 3,
+      name: 'Big Boss Pizza - Karachi (Coming Soon)',
+      address: 'Karachi, Pakistan',
+      city: 'Karachi',
+      phone: 'Coming Soon',
+      hours: 'Coming Soon',
+      coordinates: { lat: 24.8607, lng: 67.0011 },
+      image: 'https://images.pexels.com/photos/1581384/pexels-photo-1581384.jpeg?auto=compress&cs=tinysrgb&w=400',
+      status: 'coming-soon'
+    },
+    {
+      id: 4,
+      name: 'Big Boss Pizza - Hyderabad (Coming Soon)',
+      address: 'Hyderabad, Pakistan',
+      city: 'Hyderabad',
+      phone: 'Coming Soon',
+      hours: 'Coming Soon',
+      coordinates: { lat: 25.3960, lng: 68.3578 },
+      image: 'https://images.pexels.com/photos/1581384/pexels-photo-1581384.jpeg?auto=compress&cs=tinysrgb&w=400',
+      status: 'coming-soon'
+    },
+    {
+      id: 5,
+      name: 'Big Boss Pizza - Lahore (Coming Soon)',
+      address: 'Lahore, Pakistan',
+      city: 'Lahore',
+      phone: 'Coming Soon',
+      hours: 'Coming Soon',
+      coordinates: { lat: 31.5204, lng: 74.3587 },
+      image: 'https://images.pexels.com/photos/1581384/pexels-photo-1581384.jpeg?auto=compress&cs=tinysrgb&w=400',
+      status: 'coming-soon'
+    },
+    {
+      id: 6,
+      name: 'Big Boss Pizza - Islamabad (Coming Soon)',
+      address: 'Islamabad, Pakistan',
+      city: 'Islamabad',
+      phone: 'Coming Soon',
+      hours: 'Coming Soon',
+      coordinates: { lat: 33.6844, lng: 73.0479 },
+      image: 'https://images.pexels.com/photos/1581384/pexels-photo-1581384.jpeg?auto=compress&cs=tinysrgb&w=400',
+      status: 'coming-soon'
     }
   ];
 
@@ -46,6 +94,11 @@ const Branches: React.FC = () => {
   });
 
   const handleViewDetails = (branch: any) => {
+    // Disable interactive map for coming-soon branches
+    if (branch.status === 'coming-soon') {
+      setSelectedBranch(null);
+      return;
+    }
     setSelectedBranch(branch);
   };
 
@@ -251,51 +304,7 @@ const Branches: React.FC = () => {
                     referrerPolicy="no-referrer-when-downgrade"
                     title={`Map showing ${selectedBranch.name}`}
                   />
-                ) : (
-                  <div className="flex items-center justify-center h-full">
-                    {/* Default Map View */}
-                    <div className="text-center">
-                      <div className="w-24 h-24 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <MapPin className="h-12 w-12 text-primary-600" />
-                      </div>
-                      <h3 className="text-xl font-semibold text-gray-900 mb-2">Interactive Map</h3>
-                      <p className="text-gray-600 mb-6">
-                        Select a branch to view detailed location on Google Maps
-                      </p>
-                      
-                      {/* Branch Quick Links */}
-                      <div className="space-y-2">
-                        {branches.map((branch) => (
-                          <button
-                            key={branch.id}
-                            onClick={() => handleViewDetails(branch)}
-                            className={`block w-full p-3 rounded-lg border text-left transition-all hover:shadow-md ${
-                              branch.status === 'coming-soon'
-                                ? 'border-yellow-200 bg-yellow-50 hover:bg-yellow-100'
-                                : 'border-primary-200 bg-primary-50 hover:bg-primary-100'
-                            }`}
-                          >
-                            <div className="flex items-center space-x-3">
-                              <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                                branch.status === 'coming-soon' ? 'bg-yellow-500' : 'bg-primary-600'
-                              }`}>
-                                {branch.status === 'coming-soon' ? (
-                                  <AlertCircle className="h-4 w-4 text-white" />
-                                ) : (
-                                  <MapPin className="h-4 w-4 text-white" />
-                                )}
-                              </div>
-                              <div>
-                                <h4 className="font-medium text-gray-900">{branch.name}</h4>
-                                <p className="text-sm text-gray-600">{branch.city}</p>
-                              </div>
-                            </div>
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                )}
+                ) : null}
                 
                 {/* Branch Info Overlay */}
                 {selectedBranch && (

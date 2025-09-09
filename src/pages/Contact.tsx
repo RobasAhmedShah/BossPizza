@@ -67,7 +67,7 @@ const Contact: React.FC = () => {
                 <div>
                   <h3 className="text-lg font-semibold text-gray-900 mb-1">Phone</h3>
                   <p className="text-gray-600">📞 +92 21 1234 5678</p>
-                  <p className="text-sm text-gray-500 mt-1">Available 24/7 for orders</p>
+                  <p className="text-sm text-gray-500 mt-1">Available during business hours</p>
                 </div>
               </div>
 
@@ -88,7 +88,7 @@ const Contact: React.FC = () => {
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold text-gray-900 mb-1">Location</h3>
-                  <p className="text-gray-600">📍 Safa Heights, Precinct 11A, Bahria Town, Karachi</p>
+                  <p className="text-gray-600">📍 Safa Heights, Precinct 11A Commercial, Bahria Town Karachi</p>
                   <p className="text-sm text-gray-500 mt-1">Visit us for dine-in experience</p>
                 </div>
               </div>
@@ -99,7 +99,7 @@ const Contact: React.FC = () => {
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold text-gray-900 mb-1">Hours</h3>
-                  <p className="text-gray-600">Mon–Sun: 11 AM–11 PM</p>
+                  <p className="text-gray-600">Mon–Sun: 5 PM–12 AM</p>
                   <p className="text-sm text-gray-500 mt-1">Open every day of the week</p>
                 </div>
               </div>
