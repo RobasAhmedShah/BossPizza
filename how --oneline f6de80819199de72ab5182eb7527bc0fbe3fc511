@@ -1,0 +1,10 @@
+[33mc1e468a[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m fix: add explicit Rollup dependency and update install commands to include optional deps for Vercel
+[33me9616c0[m chore: remove deprecated Vercel configuration file for customer app
+[33mc869a3d[m update
+[33m59e48df[m feat: implement separate Vercel projects deployment strategy with shared packages
+[33m53c54b4[m fix: update Vercel build command to properly target customer app
+[33m44e6c67[m fix3
+[33mb7aef73[m fix: resolve Next.js build issues - remove conflicting configs and disable ESLint during builds
+[33m631e1d2[m feat: configure single project deployment for monorepo with shared packages
+[33m7abed46[m fix: update Vercel configuration for proper deployment triggering
+[33m17f5614[m test
