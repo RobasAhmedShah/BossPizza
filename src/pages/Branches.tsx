@@ -13,6 +13,9 @@ const Branches: React.FC = () => {
     'Lahore',
     'Islamabad',
     'Quetta'
+    'Faisalabad'
+    'Peshawar'
+    'Dipalpur'
   ];
 
   const branches = [
@@ -77,6 +80,39 @@ const Branches: React.FC = () => {
       name: 'Big Boss Pizza - Islamabad (Coming Soon)',
       address: 'Islamabad, Pakistan',
       city: 'Islamabad',
+      phone: 'Coming Soon',
+      hours: 'Coming Soon',
+      coordinates: { lat: 33.6844, lng: 73.0479 },
+      image: 'https://images.pexels.com/photos/1581384/pexels-photo-1581384.jpeg?auto=compress&cs=tinysrgb&w=400',
+      status: 'coming-soon'
+    }
+    {
+      id: 6,
+      name: 'Big Boss Pizza - Peshawar (Coming Soon)',
+      address: 'Peshawar, Pakistan',
+      city: 'Peshawar',
+      phone: 'Coming Soon',
+      hours: 'Coming Soon',
+      coordinates: { lat: 33.6844, lng: 73.0479 },
+      image: 'https://images.pexels.com/photos/1581384/pexels-photo-1581384.jpeg?auto=compress&cs=tinysrgb&w=400',
+      status: 'coming-soon'
+    }
+  {
+      id: 6,
+      name: 'Big Boss Pizza - Depalpur (Coming Soon)',
+      address: 'Depalpur, Pakistan',
+      city: 'Depalpur',
+      phone: 'Coming Soon',
+      hours: 'Coming Soon',
+      coordinates: { lat: 33.6844, lng: 73.0479 },
+      image: 'https://images.pexels.com/photos/1581384/pexels-photo-1581384.jpeg?auto=compress&cs=tinysrgb&w=400',
+      status: 'coming-soon'
+    }
+  {
+      id: 6,
+      name: 'Big Boss Pizza - Faisalabad (Coming Soon)',
+      address: 'Faisalabad, Pakistan',
+      city: 'Faisalabad',
       phone: 'Coming Soon',
       hours: 'Coming Soon',
       coordinates: { lat: 33.6844, lng: 73.0479 },
